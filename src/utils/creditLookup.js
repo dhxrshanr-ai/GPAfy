@@ -1,4 +1,5 @@
-import { detectDeptFromCode, getSubjectDetails, saveOverride, saveToLearned, getSubjectSuggestions, regulationData } from './subjectLookup'
+import { detectDeptFromCode, getSubjectDetails, saveOverride, saveToLearned, getSubjectSuggestions } from './subjectLookup'
+import { regulationData } from './regulationData'
 
 export { saveOverride, saveToLearned, getSubjectSuggestions }
 
@@ -45,21 +46,7 @@ export function getCreditsFromSubjectCode(code) {
     }
   }
 
-  // #region agent log
-  fetch('http://127.0.0.1:7727/ingest/68db56c2-efdb-46c3-95cb-9b85309482d9', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': 'b6b6fc' },
-    body: JSON.stringify({
-      sessionId: 'b6b6fc',
-      runId: 'pre-fix',
-      hypothesisId: 'H1',
-      location: 'creditLookup.js:getCreditsFromSubjectCode',
-      message: 'getSubjectDetails output for credit/name auto-fill gate',
-      data: { input: code, dept: context.dept, detailsFound: details.found, returnedKeys: Object.keys(details || {}) },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {})
-  // #endregion
+  // Layer 1: Database or Learned Lookups
 
   if (details.found) {
     // Preserve existing UI badges by mapping "non-exact" matches to "pattern".
@@ -72,42 +59,12 @@ export function getCreditsFromSubjectCode(code) {
             ? 'learned'
             : 'pattern'
 
-    // #region agent log
-    fetch('http://127.0.0.1:7727/ingest/68db56c2-efdb-46c3-95cb-9b85309482d9', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': 'b6b6fc' },
-      body: JSON.stringify({
-        sessionId: 'b6b6fc',
-        runId: 'pre-fix',
-        hypothesisId: 'H1',
-        location: 'creditLookup.js:getCreditsFromSubjectCode:branch',
-        message: 'Caller accepted getSubjectDetails as found',
-        data: { code, credits: details.credits, name: details.name, source: details.source },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => {})
-    // #endregion
 
     return { credits: details.credits, name: details.name, type: details.type, source }
   }
 
   // Layer 2: Pattern-Based Detection (credits only)
 
-  // #region agent log
-  fetch('http://127.0.0.1:7727/ingest/68db56c2-efdb-46c3-95cb-9b85309482d9', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': 'b6b6fc' },
-    body: JSON.stringify({
-      sessionId: 'b6b6fc',
-      runId: 'pre-fix',
-      hypothesisId: 'H1',
-      location: 'creditLookup.js:getCreditsFromSubjectCode:fallback',
-      message: 'Caller treated getSubjectDetails as NOT found; using detectCreditsFromPattern',
-      data: { code, inferredDept: context.dept, patternCredits: detectCreditsFromPattern(code).credits, patternType: detectCreditsFromPattern(code).type },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {})
-  // #endregion
 
   return detectCreditsFromPattern(code)
 }

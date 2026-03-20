@@ -214,21 +214,6 @@ export function getSubjectDetails(input, context = {}) {
   // 1) Exact code match
   if (isLikelySubjectCode(inputUpper) && index.has(inputUpper)) {
     const persisted = applyPersistence(index.get(inputUpper))
-    // #region agent log
-    fetch('http://127.0.0.1:7727/ingest/68db56c2-efdb-46c3-95cb-9b85309482d9', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': 'b6b6fc' },
-      body: JSON.stringify({
-        sessionId: 'b6b6fc',
-        runId: 'pre-fix',
-        hypothesisId: 'H1',
-        location: 'subjectLookup.js:getSubjectDetails:exact',
-        message: 'Exact match return payload (found expected by callers?)',
-        data: { inputUpper, returnedKeys: Object.keys(persisted), found: persisted.found, source: persisted.source },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => {})
-    // #endregion
     return persisted
   }
 
@@ -257,21 +242,6 @@ export function getSubjectDetails(input, context = {}) {
     // Map "non-exact match" to an estimated source for UI.
     const source = persisted.source === 'database' ? 'keyword' : persisted.source
     const result = { ...persisted, source }
-    // #region agent log
-    fetch('http://127.0.0.1:7727/ingest/68db56c2-efdb-46c3-95cb-9b85309482d9', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': 'b6b6fc' },
-      body: JSON.stringify({
-        sessionId: 'b6b6fc',
-        runId: 'pre-fix',
-        hypothesisId: 'H1',
-        location: 'subjectLookup.js:getSubjectDetails:keyword',
-        message: 'Keyword match return payload (found expected by callers?)',
-        data: { inputUpper: trimmed.toUpperCase(), bestCode: persisted.code, returnedKeys: Object.keys(result), found: result.found, source: result.source, bestScore },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => {})
-    // #endregion
     return result
   }
 
@@ -296,21 +266,6 @@ export function getSubjectDetails(input, context = {}) {
     const persisted = applyPersistence(best)
     const source = persisted.source === 'database' ? 'fuzzy' : persisted.source
     const result = { ...persisted, source }
-    // #region agent log
-    fetch('http://127.0.0.1:7727/ingest/68db56c2-efdb-46c3-95cb-9b85309482d9', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': 'b6b6fc' },
-      body: JSON.stringify({
-        sessionId: 'b6b6fc',
-        runId: 'pre-fix',
-        hypothesisId: 'H1',
-        location: 'subjectLookup.js:getSubjectDetails:fuzzy',
-        message: 'Fuzzy match return payload (found expected by callers?)',
-        data: { inputUpper: trimmed.toUpperCase(), bestCode: persisted.code, returnedKeys: Object.keys(result), found: result.found, source: result.source, bestScore },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => {})
-    // #endregion
     return result
   }
 

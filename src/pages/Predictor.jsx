@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import GradeSelector from '../components/GradeSelector'
 import { GRADE_OPTIONS, getGradePoint } from '../utils/gradePoints'
 import { calculateGPA } from '../utils/calculateGPA'
+import { loadData } from '../utils/storage'
 
 const DEFAULT_SUBS = () => [
   { id: 1, name: 'Subject 1', credits: '3', current: '', predicted: '' },
@@ -36,66 +37,101 @@ export default function GradePredictor() {
     setSubjects(prev => [...prev, { id: Date.now(), name: `Subject ${prev.length + 1}`, credits: '3', current: '', predicted: '' }])
   }
 
+  const loadFromCalculator = () => {
+    const saved = loadData('gpa_subjects')
+    if (!saved || saved.length === 0) return
+    const loaded = saved
+      .filter(s => s.name || s.credits)
+      .map((s, i) => ({
+        id: Date.now() + i,
+        name: s.name || `Subject ${i + 1}`,
+        credits: s.credits || '3',
+        current: s.grade || '',
+        predicted: s.grade || '',
+      }))
+    if (loaded.length > 0) setSubjects(loaded)
+  }
+
   const delta = predictedGPA - currentGPA
 
   return (
-    <div className="predictor-page">
+    <div className="gpafy-page">
       <div className="section-header">
         <h2 className="section-title">Grade Predictor</h2>
         <p className="section-desc">"If I get A+ in Maths, what will my GPA be?"</p>
       </div>
 
-      <div className="predictor-comparison">
-        <div className="predictor-card predictor-current">
-          <div className="predictor-label">Current GPA</div>
-          <div className="predictor-value">{currentGPA > 0 ? currentGPA.toFixed(2) : '—'}</div>
+      <div className="subject-card target-card">
+        <div className="card-header">
+          <span className="card-index">⚡ Simulation Dashboard</span>
         </div>
-        <div className="predictor-arrow">→</div>
-        <div className="predictor-card predictor-predicted">
-          <div className="predictor-label">Predicted GPA</div>
-          <div className="predictor-value">{predictedGPA > 0 ? predictedGPA.toFixed(2) : '—'}</div>
-        </div>
-        <div className={`predictor-card predictor-delta ${delta > 0 ? 'delta-up' : delta < 0 ? 'delta-down' : ''}`}>
-          <div className="predictor-label">Change</div>
-          <div className="predictor-value">
-            {currentGPA > 0 && predictedGPA > 0 ? (delta >= 0 ? '+' : '') + delta.toFixed(2) : '—'}
+        <div className="predictor-comparison">
+          <div className="s-stat">
+            <span className="s-lbl">Current GPA</span>
+            <span className="s-val">{currentGPA > 0 ? currentGPA.toFixed(2) : '—'}</span>
+          </div>
+          <div className="predictor-arrow">→</div>
+          <div className={`s-stat ${delta > 0 ? 'text-teal' : delta < 0 ? 'text-error' : ''}`}>
+            <span className="s-lbl">Predicted GPA</span>
+            <span className="s-val">{predictedGPA > 0 ? predictedGPA.toFixed(2) : '—'}</span>
+          </div>
+          <div className={`s-stat ${delta > 0 ? 'text-teal' : delta < 0 ? 'text-error' : ''}`}>
+            <span className="s-lbl">Change</span>
+            <span className="s-val">
+              {currentGPA > 0 && predictedGPA > 0 ? (delta >= 0 ? '+' : '') + delta.toFixed(2) : '—'}
+            </span>
           </div>
         </div>
       </div>
 
-      <div className="predictor-grid">
+      <div className="subject-container">
         {subjects.map((sub, i) => (
-          <div className="predictor-row" key={sub.id}>
-            <input
-              type="text"
-              className="input"
-              value={sub.name}
-              onChange={e => update(i, 'name', e.target.value)}
-            />
-            <input
-              type="number"
-              className="input credits-input"
-              value={sub.credits}
-              onChange={e => update(i, 'credits', e.target.value)}
-              min="1" max="10" placeholder="Cr"
-            />
-            <div className="predictor-grade-pair">
-              <div className="input-group">
-                <label>Now</label>
-                <GradeSelector value={sub.current} onChange={val => update(i, 'current', val)} />
-              </div>
-              <div className="input-group">
-                <label>What If</label>
-                <GradeSelector value={sub.predicted} onChange={val => update(i, 'predicted', val)} />
-              </div>
-            </div>
+          <div className="subject-card" key={sub.id}>
+             <div className="card-header">
+               <span className="card-index">Subject {i + 1}</span>
+               {sub.credits && <span className="status-badge badge-default">{sub.credits} CREDITS</span>}
+             </div>
+             <div className="card-body">
+               <div className="card-row">
+                 <div className="input-group flex-2">
+                   <label className="input-label">Subject Name</label>
+                   <input
+                     type="text"
+                     className="input"
+                     value={sub.name}
+                     onChange={e => update(i, 'name', e.target.value)}
+                   />
+                 </div>
+                 <div className="input-group flex-1">
+                   <label className="input-label">Credits</label>
+                   <input
+                     type="number"
+                     className="input credits-input-modern"
+                     value={sub.credits}
+                     onChange={e => update(i, 'credits', e.target.value)}
+                     min="1" max="10"
+                   />
+                 </div>
+               </div>
+               <div className="card-row">
+                 <div className="input-group flex-1">
+                   <label className="input-label">Current Grade</label>
+                   <GradeSelector value={sub.current} onChange={val => update(i, 'current', val)} />
+                 </div>
+                 <div className="input-group flex-1">
+                   <label className="input-label">"What If" Grade</label>
+                   <GradeSelector value={sub.predicted} onChange={val => update(i, 'predicted', val)} />
+                 </div>
+               </div>
+             </div>
           </div>
         ))}
       </div>
 
-      <div className="action-bar">
-        <button className="btn btn-primary" onClick={addSubject}>+ Add Subject</button>
-        <button className="btn btn-outline" onClick={() => setSubjects(DEFAULT_SUBS())}>Reset</button>
+      <div className="calc-actions" style={{ marginBottom: '40px' }}>
+        <button className="btn btn-primary-modern" onClick={addSubject}>+ Add Entry</button>
+        <button className="btn btn-outline-modern" onClick={loadFromCalculator}>📥 Sync from GPA</button>
+        <button className="btn btn-outline-modern" onClick={() => setSubjects(DEFAULT_SUBS())}>Reset</button>
       </div>
     </div>
   )

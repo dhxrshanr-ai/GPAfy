@@ -11,6 +11,8 @@ export default function GPAResult({ gpa, totalCredits, totalSubjects, arrears, o
   if (gpa < 5) { emoji = '⚠️'; msg = 'Needs improvement'; tier = 'tier-f'; }
   if (gpa === 0) { emoji = '—'; msg = 'Set grades to calculate'; tier = ''; }
 
+  const percentage = gpa > 0 ? ((gpa - 0.75) * 10).toFixed(1) : null
+
   return (
     <div className={`result-card ${tier}`}>
       <div className="result-header">
@@ -19,6 +21,12 @@ export default function GPAResult({ gpa, totalCredits, totalSubjects, arrears, o
         <div className="result-label">Semester GPA</div>
         <div className="result-msg">{msg}</div>
       </div>
+
+      {percentage && (
+        <div className="result-pct">
+          ≈ {percentage}% (Equivalent Percentage)
+        </div>
+      )}
 
       {arrears > 0 && (
         <div className="result-alert result-alert-fail">

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { Subject } from '@/types';
 
 type GradeState = Record<string, string>; // [subjectCode]: grade
 type SelectionState = Record<string, string>; // [placeholderCode]: selectedSubjectCode
@@ -12,14 +13,14 @@ interface GpaStore {
   // [reg][dept][sem] = SelectionState
   selections: Record<string, Record<string, Record<number, SelectionState>>>;
   // [reg][dept][sem] = Subject[]
-  extraSubjects: Record<string, Record<string, Record<number, any[]>>>; // Using any[] to break cyclic import with Subject from types directly, or we can import Subject
+  extraSubjects: Record<string, Record<string, Record<number, Subject[]>>>;
   setRegulation: (reg: string) => void;
   setDepartment: (dept: string) => void;
   setGrade: (sem: number, subjectCode: string, grade: string) => void;
   getGrade: (sem: number, subjectCode: string) => string;
   setSelection: (sem: number, placeholderCode: string, selectedSubjectCode: string) => void;
   getSelection: (sem: number, placeholderCode: string) => string | undefined;
-  addExtraSubject: (sem: number, subject: any) => void;
+  addExtraSubject: (sem: number, subject: Subject) => void;
   removeExtraSubject: (sem: number, subjectCode: string) => void;
   resetSemester: (sem: number) => void;
   resetAll: () => void;
@@ -72,7 +73,7 @@ export const useGpaStore = create<GpaStore>()(
         return state.selections[state.regulation]?.[state.department]?.[sem]?.[placeholderCode];
       },
 
-      addExtraSubject: (sem: number, subject: any) => set((state) => {
+      addExtraSubject: (sem: number, subject: Subject) => set((state) => {
         const { regulation, department } = state;
         const currentExtra = structuredClone(state.extraSubjects);
         
@@ -81,7 +82,7 @@ export const useGpaStore = create<GpaStore>()(
         if (!currentExtra[regulation][department][sem]) currentExtra[regulation][department][sem] = [];
         
         // ensure no duplicates by code
-        if (!currentExtra[regulation][department][sem].some((s: any) => s.code === subject.code)) {
+        if (!currentExtra[regulation][department][sem].some((s: Subject) => s.code === subject.code)) {
            currentExtra[regulation][department][sem].push(subject);
         }
         
@@ -93,7 +94,7 @@ export const useGpaStore = create<GpaStore>()(
         const currentExtra = structuredClone(state.extraSubjects);
         
         if (currentExtra[regulation]?.[department]?.[sem]) {
-           currentExtra[regulation][department][sem] = currentExtra[regulation][department][sem].filter((s: any) => s.code !== subjectCode);
+           currentExtra[regulation][department][sem] = currentExtra[regulation][department][sem].filter((s: Subject) => s.code !== subjectCode);
         }
         
         // Also clean up Grade map so it doesn't linger forever

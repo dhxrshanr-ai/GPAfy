@@ -204,12 +204,25 @@ export function SemesterSection({
           </div>
         </div>
       ) : (
-        <div className="pt-6 flex flex-col gap-4 relative">
-          {rows.map((row, i) => (
-            <div key={i} className="relative transition-all duration-300 hover:!z-[70] focus-within:!z-[70]" style={{ zIndex: 50 - i }}>
-              {row}
-             </div>
-          ))}
+        <>
+          <motion.div layout className="pt-6 flex flex-col gap-4 relative">
+            <AnimatePresence mode="popLayout">
+              {rows.map((row, i) => (
+                <motion.div 
+                  layout
+                  key={(row as React.ReactElement).key}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.3 }}
+                  className="relative transition-all duration-300 hover:!z-[70] focus-within:!z-[70]" 
+                  style={{ zIndex: 50 - i }}
+                >
+                  {row}
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
           
           <button 
             onClick={() => openElectivePicker('EXTRA_SUBJECT', [], 'Additional Subject')}
@@ -228,7 +241,7 @@ export function SemesterSection({
           >
             <RotateCcw size={14} strokeWidth={3} className="group-hover:-rotate-90 transition-transform duration-500" /> Reset Semester
           </button>
-        </div>
+        </>
       )}
     </div>
   );

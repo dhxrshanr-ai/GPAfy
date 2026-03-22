@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GPAfy — Anna University GPA & CGPA Calculator
 
-## Getting Started
+GPAfy is a premium, space-themed GPA and CGPA calculator designed specifically for Anna University regulations. It offers a weightless, highly interactive experience with several key features:
 
-First, run the development server:
+## 🌟 Key Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Multi-Regulation Support**: Accurate calculation for **R2013**, **R2017**, **R2021**, and **R2025**.
+- **Dual Calculation Modes**:
+  - **SGPA Mode**: Real-time calculation with manual subject count and elective picker for each semester.
+  - **CGPA Mode (Quick Entry)**: A fast manual mode where you simply enter the GPA and Credits earned for your previous semesters.
+- **Elective Picker**: Seamlessly select professional or open electives from a comprehensive, regulation-specific database.
+- **Antigravity UI**: A stunning, high-fidelity user interface featuring glassmorphism, solar-orange accents, and smooth micro-animations.
+- **Mobile Optimized**: A fully responsive design with a dedicated sticky result bar for a premium experience on the go.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Getting Started
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1.  **Clone the Repo**: `git clone ...`
+2.  **Install Dependencies**: `npm install`
+3.  **Run Dev Server**: `npm run dev`
+4.  **Open Browser**: Visit `http://localhost:3000`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠 Tech Stack
 
-## Learn More
+- **Framework**: [Next.js](https://nextjs.org) (App Router)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com) & Vanilla CSS
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Icons**: [Lucide React](https://lucide.dev)
+- **State Management**: [Zustand](https://github.com/pmndrs/zustand)
+- **Typography**: Space Grotesque, Orbitron, Outfit (Google Fonts)
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+Designed with precision for students who value excellence. 📐🛰✨

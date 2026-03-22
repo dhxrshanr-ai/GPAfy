@@ -32,7 +32,7 @@ function CalculatorContent() {
   const queryMode = searchParams.get('mode');
 
   const { 
-    regulation, setRegulation, department, setDepartment, getGrade, grades, selections, 
+    regulation, setRegulation, department, setDepartment, getGrade, selections, 
     extraSubjects, manualSemData, cgpaSemesterCount, subjectCounts, getSelection, 
     getMasterSubjects, getElectivePools 
   } = useGpaStore();
@@ -41,24 +41,19 @@ function CalculatorContent() {
   const [activeSem, setActiveSem] = useState<number>(1);
   const [isCalculated, setIsCalculated] = useState(false);
 
-  // Sync initial URL if exists
+  // Fresh start on mount (page refresh)
   useEffect(() => {
-    if (queryReg && queryReg !== regulation) setRegulation(queryReg);
-    if (queryDept && queryDept !== department) setDepartment(queryDept);
-    if (queryMode && queryMode !== mode) setMode(queryMode as 'sgpa' | 'cgpa');
-  }, [queryReg, queryDept, queryMode, regulation, department, mode, setRegulation, setDepartment, setMode]);
-
-  // Hide calculation on change
-  const stateHash = JSON.stringify({
-    g: grades[regulation]?.[department],
-    s: selections[regulation]?.[department],
-    e: extraSubjects[regulation]?.[department],
-    c: cgpaSemesterCount[regulation]?.[department]
-  });
-
-  useEffect(() => {
+    window.scrollTo(0, 0);
+    // If there ARE params, clear them to force "start from first section"
+    if (queryReg || queryDept || queryMode) {
+      router.replace('/');
+    }
+    // and hidden results
     setIsCalculated(false);
-  }, [stateHash, regulation, department, mode, activeSem]);
+  }, [queryReg, queryDept, queryMode, router]); // Dependency array for lint
+
+  // Sync state ONLY when user explicitly changes things (already handled by handleRegChange etc)
+  // We remove the auto-sync-from-URL-on-mount to ensure a fresh start on every refresh
 
   const updateUrl = (r: string, d: string, m: string) => {
     router.replace(`/?reg=${r}&dept=${d}&mode=${m}`);

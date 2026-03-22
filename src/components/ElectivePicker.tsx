@@ -90,10 +90,7 @@ export function ElectivePicker({
         <div className="p-8 pb-6 border-b border-white/5 relative shrink-0">
           <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-primary/10 to-transparent pointer-events-none" />
           <div className="flex items-center justify-between mb-8 relative z-10">
-            <h3 className="font-space-grotesque font-black text-2xl text-white tracking-tighter flex items-center gap-4 text-glow-orange">
-              <div className="w-10 h-10 rounded-full border-2 border-primary flex items-center justify-center shadow-[0_0_15px_rgba(255,85,0,0.5)] text-xs">
-                {title.substring(0,2).toUpperCase()}
-              </div>
+            <h3 className="font-space-grotesque font-medium text-xl text-white tracking-tight flex items-center gap-4 text-glow-orange">
               {title}
             </h3>
             <button 

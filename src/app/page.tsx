@@ -154,6 +154,7 @@ function CalculatorContent() {
       
       {/* 1. Regulation Picker */}
       <motion.section 
+        layout
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
@@ -175,6 +176,7 @@ function CalculatorContent() {
       <AnimatePresence>
         {depOptions.length > 0 && (
           <motion.section 
+            layout
             initial={{ opacity: 0, y: 20, height: 0 }}
             animate={{ opacity: 1, y: 0, height: 'auto' }}
             exit={{ opacity: 0, y: -20, height: 0 }}
@@ -197,6 +199,7 @@ function CalculatorContent() {
 
       {/* 3. Mode Toggle */}
       <motion.section 
+        layout
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
@@ -217,6 +220,7 @@ function CalculatorContent() {
       <AnimatePresence>
         {mode === 'sgpa' && depOptions.length > 0 && department && (
           <motion.section 
+            layout
             initial={{ opacity: 0, y: 20, height: 0 }}
             animate={{ opacity: 1, y: 0, height: 'auto' }}
             exit={{ opacity: 0, y: -20, height: 0 }}

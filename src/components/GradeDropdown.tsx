@@ -43,7 +43,7 @@ export function GradeDropdown({ value, onChange, dropUp = false }: { value?: str
             initial={{ opacity: 0, y: dropUp ? 10 : -10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: dropUp ? 10 : -10, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
             className={cn(
               "absolute right-0 w-32 bg-[#111111]/95 border border-white/10 rounded-2xl p-2 shadow-[0_20px_50px_rgba(0,0,0,0.8)] z-[100] flex flex-col gap-1 backdrop-blur-xl max-h-[220px] overflow-y-auto scrollbar-hide",
               dropUp ? "bottom-full mb-3" : "top-full mt-2"
@@ -58,13 +58,19 @@ export function GradeDropdown({ value, onChange, dropUp = false }: { value?: str
                   setIsOpen(false);
                 }}
                 className={cn(
-                  "p-3 rounded-xl font-space-grotesque font-black text-sm text-left transition-colors",
+                  "p-3 rounded-xl font-space-grotesque font-black text-sm text-left transition-all relative group/item active:scale-95",
                   value === g
-                    ? "bg-primary/20 text-primary"
-                    : "text-white/60 hover:bg-white/10 hover:text-white"
+                    ? "text-primary"
+                    : "text-white/40 hover:bg-white/5 hover:text-white"
                 )}
               >
-                {g}
+                {value === g && (
+                  <motion.div 
+                    layoutId={`activeGrade-${value}`}
+                    className="absolute inset-0 bg-primary/20 rounded-xl border border-primary/30"
+                  />
+                )}
+                <span className="relative z-10">{g}</span>
               </button>
             ))}
           </motion.div>

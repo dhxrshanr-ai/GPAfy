@@ -243,7 +243,7 @@ function CalculatorContent() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.3 }}
       >
-         <h2 className="text-[10px] font-space-grotesque font-black text-white/60 uppercase tracking-[0.4em] mb-8 px-8 text-glow-white">
+         <h2 className="text-[10px] font-space-grotesque font-black text-gray-400 uppercase tracking-[0.4em] mb-8 px-8">
             {mode === 'cgpa' ? 'Cumulative Data Input' : `Semester ${activeSem} Data Entry`}
          </h2>
          
@@ -289,7 +289,7 @@ function CalculatorContent() {
               }}
               className="w-full max-w-sm font-space-grotesque font-black text-xl py-6 rounded-[2.5rem] text-white solar-glow relative overflow-hidden transition-weightless group"
               style={{
-                background: "linear-gradient(135deg, #FF5500 0%, #FF8C00 50%, #FF5500 100%)",
+                background: "linear-gradient(135deg, #059669 0%, #10b981 50%, #059669 100%)",
                 backgroundSize: "200% auto"
               }}
             >
@@ -317,16 +317,16 @@ function CalculatorContent() {
              
              {mode === 'cgpa' ? (
                <div className="flex flex-col gap-10">
-                 <div className="glass-panel rounded-[3rem] p-10 text-white shadow-[0_0_50px_rgba(255,85,0,0.15)] flex flex-col items-center gap-10 relative overflow-hidden border-primary/30 depth-tilt">
-                   <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 animate-pulse" />
-                   <div className="absolute bottom-0 left-0 w-80 h-80 bg-white/5 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2" />
+                 <div className="glass-panel rounded-[3rem] p-10 text-gray-900 shadow-[0_8px_50px_rgba(255,85,0,0.08)] flex flex-col items-center gap-10 relative overflow-hidden border-primary/20 depth-tilt">
+                   <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 animate-pulse" />
+                   <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-50 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2" />
                    <div className="text-center z-10">
-                     <p className="text-primary font-space-grotesque font-black text-xs tracking-[0.4em] uppercase mb-4 text-glow-orange">Cumulative Score</p>
+                     <p className="text-primary font-space-grotesque font-black text-xs tracking-[0.4em] uppercase mb-4">Cumulative Score</p>
                      <motion.h1 
                        initial={{ scale: 0.5, opacity: 0 }}
                        animate={{ scale: 1, opacity: 1 }}
                        transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-                       className="text-7xl sm:text-9xl font-space-grotesque font-black tracking-tighter leading-none text-glow-white"
+                       className="text-7xl sm:text-9xl font-space-grotesque font-black tracking-tighter leading-none text-gray-900"
                      >
                        {finalCgpa}
                      </motion.h1>
@@ -337,15 +337,15 @@ function CalculatorContent() {
                  </div>
                </div>
              ) : (
-               <div className="glass-panel rounded-[3rem] p-10 text-white shadow-[0_0_50px_rgba(255,85,0,0.15)] flex flex-col items-center gap-10 relative overflow-hidden border-primary/30 depth-tilt">
-                 <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 animate-pulse" />
+               <div className="glass-panel rounded-[3rem] p-10 text-gray-900 shadow-[0_8px_50px_rgba(255,85,0,0.08)] flex flex-col items-center gap-10 relative overflow-hidden border-primary/20 depth-tilt">
+                 <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 animate-pulse" />
                  <div className="text-center z-10">
-                   <p className="text-primary font-space-grotesque font-black text-xs tracking-[0.4em] uppercase mb-4 text-glow-orange">Semester {activeSem} GPA</p>
+                   <p className="text-primary font-space-grotesque font-black text-xs tracking-[0.4em] uppercase mb-4">Semester {activeSem} GPA</p>
                    <motion.h1 
                      initial={{ scale: 0.5, opacity: 0 }}
                      animate={{ scale: 1, opacity: 1 }}
                      transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-                     className="text-7xl sm:text-9xl font-space-grotesque font-black tracking-tighter leading-none text-glow-white"
+                     className="text-7xl sm:text-9xl font-space-grotesque font-black tracking-tighter leading-none text-gray-900"
                    >
                      {activeSgpa.toFixed(2)}
                    </motion.h1>
@@ -368,7 +368,7 @@ function CalculatorContent() {
 
 export default function Home() {
   return (
-    <Suspense fallback={<div className="p-12 text-center text-white/40 font-space-grotesque tracking-widest animate-pulse">Initializing stellar systems...</div>}>
+    <Suspense fallback={<div className="p-12 text-center text-gray-400 font-space-grotesque tracking-widest animate-pulse">Initializing stellar systems...</div>}>
       <CalculatorContent />
     </Suspense>
   )

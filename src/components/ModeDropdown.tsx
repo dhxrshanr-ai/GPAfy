@@ -27,8 +27,8 @@ export function ModeDropdown({ value, onChange }: ModeDropdownProps) {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "w-full h-16 bg-white/5 border rounded-[1.5rem] px-6 text-white font-space-grotesque font-black text-lg outline-none transition-all cursor-pointer shadow-inner flex items-center justify-between group uppercase tracking-[0.2em]",
-          isOpen ? "border-primary bg-primary/5" : "border-white/10 hover:border-primary/40"
+          "w-full h-16 bg-gray-50 border rounded-[1.5rem] px-6 text-gray-900 font-space-grotesque font-black text-lg outline-none transition-all cursor-pointer shadow-inner flex items-center justify-between group uppercase tracking-[0.2em]",
+          isOpen ? "border-primary bg-emerald-50" : "border-gray-200 hover:border-primary/40"
         )}
       >
         <span>{value === 'sgpa' ? 'GPA' : 'CGPA'} Mode</span>
@@ -47,7 +47,7 @@ export function ModeDropdown({ value, onChange }: ModeDropdownProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="absolute top-full left-0 right-0 mt-3 bg-[#111111]/95 border border-white/10 rounded-[1.5rem] p-3 shadow-[0_30px_70px_rgba(0,0,0,0.9)] z-[100] flex flex-col gap-1 backdrop-blur-2xl"
+            className="absolute top-full left-0 right-0 mt-3 bg-white border border-gray-200 rounded-[1.5rem] p-3 shadow-[0_10px_40px_rgba(0,0,0,0.1)] z-[100] flex flex-col gap-1 backdrop-blur-2xl"
           >
             {['sgpa', 'cgpa'].map((m) => (
               <button
@@ -59,15 +59,15 @@ export function ModeDropdown({ value, onChange }: ModeDropdownProps) {
                 className={cn(
                   "p-4 rounded-xl font-space-grotesque font-black text-left transition-colors flex items-center justify-between uppercase tracking-[0.2em]",
                   value === m
-                    ? "bg-primary/20 text-primary border border-primary/30"
-                    : "text-white/60 hover:bg-white/10 hover:text-white border border-transparent"
+                    ? "bg-primary/10 text-primary border border-primary/20"
+                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-transparent"
                 )}
               >
                 <span>{m === 'sgpa' ? 'GPA' : 'CGPA'} Mode</span>
                 {value === m && (
                   <motion.div 
                     layoutId="activeModeIndicator"
-                    className="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_15px_rgba(255,85,0,0.8)]" 
+                    className="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_10px_rgba(255,85,0,0.5)]" 
                   />
                 )}
               </button>

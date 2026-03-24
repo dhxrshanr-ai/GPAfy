@@ -30,13 +30,13 @@ export function RegulationDropdown({ value, options, onChange }: RegulationDropd
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "w-full h-20 bg-white/5 border rounded-[1.5rem] px-6 text-white outline-none transition-all cursor-pointer shadow-inner flex items-center justify-between group",
-          isOpen ? "border-primary bg-primary/5" : "border-white/10 hover:border-primary/40"
+          "w-full h-20 bg-gray-50 border rounded-[1.5rem] px-6 text-gray-900 outline-none transition-all cursor-pointer shadow-inner flex items-center justify-between group",
+          isOpen ? "border-primary bg-emerald-50" : "border-gray-200 hover:border-primary/40"
         )}
       >
         <div className="flex flex-col items-start">
           <span className="font-space-grotesque font-black text-xl tracking-tighter">{value}</span>
-          <span className="text-[10px] font-bold uppercase tracking-[0.1em] opacity-40 group-hover:opacity-100 transition-opacity">
+          <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-gray-400 group-hover:text-gray-600 transition-opacity">
             {selectedOption?.label.split(' ')[1]} {selectedOption?.label.split(' ')[2]}
           </span>
         </div>
@@ -55,7 +55,7 @@ export function RegulationDropdown({ value, options, onChange }: RegulationDropd
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="absolute top-full left-0 right-0 mt-3 bg-[#111111]/95 border border-white/10 rounded-[1.5rem] p-3 shadow-[0_30px_70px_rgba(0,0,0,0.9)] z-[100] flex flex-col gap-1 backdrop-blur-2xl"
+            className="absolute top-full left-0 right-0 mt-3 bg-white border border-gray-200 rounded-[1.5rem] p-3 shadow-[0_10px_40px_rgba(0,0,0,0.1)] z-[100] flex flex-col gap-1 backdrop-blur-2xl"
           >
             {options.map((opt) => (
               <button
@@ -67,8 +67,8 @@ export function RegulationDropdown({ value, options, onChange }: RegulationDropd
                 className={cn(
                   "p-5 rounded-xl transition-colors flex items-center justify-between group/opt shrink-0",
                   value === opt.reg
-                    ? "bg-primary/20 text-primary border border-primary/30"
-                    : "text-white/60 hover:bg-white/10 hover:text-white border border-transparent"
+                    ? "bg-primary/10 text-primary border border-primary/20"
+                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-transparent"
                 )}
               >
                 <div className="flex flex-col items-start">
@@ -78,7 +78,7 @@ export function RegulationDropdown({ value, options, onChange }: RegulationDropd
                 {value === opt.reg && (
                   <motion.div 
                     layoutId="activeRegIndicator"
-                    className="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_15px_rgba(255,85,0,0.8)]" 
+                    className="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_10px_rgba(255,85,0,0.5)]" 
                   />
                 )}
               </button>

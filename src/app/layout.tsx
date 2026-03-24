@@ -1,16 +1,22 @@
 import type { Metadata, Viewport } from 'next';
-import { Space_Grotesk, Outfit } from 'next/font/google';
+import { Plus_Jakarta_Sans, Inter, Syne } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
 
-const spaceGrotesk = Space_Grotesk({
+const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
   variable: '--font-space-grotesque'
 });
 
-const outfit = Outfit({
+const inter = Inter({
   subsets: ['latin'],
   variable: '--font-outfit'
+});
+
+const syne = Syne({
+  subsets: ['latin'],
+  variable: '--font-syne',
+  weight: ['700', '800']
 });
 
 export const metadata: Metadata = {
@@ -20,7 +26,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#000000',
+  themeColor: '#F7F4F0',
 };
 
 export default function RootLayout({
@@ -29,29 +35,38 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body className={cn(
-        "min-h-screen bg-black font-outfit antialiased pb-20 md:pb-0 overflow-x-hidden selection:bg-[#FF5500]/30",
-        spaceGrotesk.variable,
-        outfit.variable
+        "min-h-screen bg-[#F7F4F0] font-outfit antialiased pb-20 md:pb-0 overflow-x-hidden selection:bg-[#059669]/20",
+        plusJakartaSans.variable,
+        inter.variable,
+        syne.variable
       )}>
-        {/* Modern Black Background elements */}
+        {/* Light Background elements */}
         <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,#1a0a00_0%,#000000_70%)] opacity-60" />
-          <div className="stars-container absolute inset-0 opacity-30" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,#d1fae5_0%,#F7F4F0_70%)] opacity-70" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,#fff0e8_0%,transparent_60%)] opacity-60" />
+          <div className="stars-container absolute inset-0 opacity-40" />
         </div>
 
-        <header className="sticky top-0 z-50 w-full transition-all duration-500 bg-[#050505]/95 border-b border-white/5">
+        <header className="sticky top-0 z-50 w-full transition-all duration-500 bg-white/80 backdrop-blur-xl border-b border-gray-200/80 shadow-sm">
           <div className="max-w-4xl mx-auto">
             <div className="py-5 px-6 flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <span className="text-3xl font-black tracking-tighter font-space-grotesque text-transparent bg-clip-text bg-gradient-to-r from-[#FF8C00] via-[#FF5500] to-[#FFFFFF] animate-shimmer-orange drop-shadow-[0_0_15px_rgba(255,85,0,0.5)]">
-                  GPAfy
-                </span>
+                <div className="flex items-center">
+                  <div className="flex items-center gap-0 bg-gray-900 rounded-2xl px-4 py-2 shadow-[0_6px_24px_rgba(0,0,0,0.25),0_0_20px_rgba(5,150,105,0.35)]">
+                    <span style={{ fontFamily: 'var(--font-syne)' }} className="text-2xl font-extrabold tracking-tight text-white leading-none">
+                      GPA
+                    </span>
+                    <span style={{ fontFamily: 'var(--font-syne)' }} className="text-2xl font-extrabold tracking-tight text-emerald-400 leading-none">
+                      fy
+                    </span>
+                  </div>
+                </div>
               </div>
 
             </div>
-            <div className="bg-gradient-to-r from-transparent via-[#FF5500]/15 to-transparent text-[#FF5500] text-[9px] py-2 px-4 text-center font-space-grotesque font-black uppercase tracking-[0.5em] border-y border-white/5">
+            <div className="bg-gradient-to-r from-transparent via-[#059669]/10 to-transparent text-[#059669] text-[9px] py-2 px-4 text-center font-space-grotesque font-black uppercase tracking-[0.5em] border-y border-emerald-100">
               • Precision GPA Calculator •
             </div>
           </div>

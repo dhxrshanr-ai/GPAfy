@@ -27,8 +27,8 @@ export function ManualCgpaTable() {
       className="space-y-12 relative z-10"
     >
       {/* Semester Count Selection */}
-      <div className="glass-panel p-8 rounded-[2.5rem] transition-weightless border-primary/20 relative z-[100]">
-        <h2 className="text-[10px] font-space-grotesque font-black text-primary uppercase tracking-[0.4em] mb-8 text-glow-orange flex items-center gap-2">
+      <div className="glass-panel p-8 rounded-[2.5rem] transition-weightless border-primary/10 relative z-[100]">
+        <h2 className="text-[10px] font-space-grotesque font-black text-primary uppercase tracking-[0.4em] mb-8 flex items-center gap-2">
           <Landmark size={14} /> Scope of Calculation
         </h2>
         
@@ -37,13 +37,13 @@ export function ManualCgpaTable() {
           onChange={setCgpaSemesterCount} 
         />
 
-        <p className="text-[9px] font-space-grotesque font-black text-white/30 uppercase tracking-[0.2em] mt-6 ml-2 italic">
+        <p className="text-[9px] font-space-grotesque font-black text-gray-400 uppercase tracking-[0.2em] mt-6 ml-2 italic">
           Select the semester till which you need to check your CGPA
         </p>
       </div>
 
       {/* Manual Entry Table */}
-      <div className="glass-panel rounded-[2.5rem] overflow-hidden border-primary/20 bg-black/40 backdrop-blur-3xl shadow-2xl relative z-0">
+      <div className="glass-panel rounded-[2.5rem] overflow-hidden border-primary/10 bg-white/60 backdrop-blur-3xl shadow-lg relative z-0">
         {/* Table Header */}
         <div className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 p-6 flex items-center text-white rounded-t-[2.5rem]">
           <div className="w-12 text-center font-space-grotesque font-black text-[10px] uppercase tracking-widest opacity-80">Sem</div>
@@ -65,9 +65,9 @@ export function ManualCgpaTable() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.3, delay: i * 0.05 }}
-                  className="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.03] border border-white/5 hover:bg-white/[0.06] transition-colors group"
+                  className="flex items-center gap-4 p-4 rounded-2xl bg-gray-50/80 border border-gray-100 hover:bg-emerald-50/40 transition-colors group"
                 >
-                  <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center font-space-grotesque font-black text-primary text-sm shadow-[0_0_15px_rgba(255,85,0,0.1)] group-hover:bg-primary group-hover:text-white transition-all duration-500">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center font-space-grotesque font-black text-primary text-sm group-hover:bg-primary group-hover:text-white transition-all duration-500">
                     {sem}
                   </div>
                   
@@ -80,7 +80,7 @@ export function ManualCgpaTable() {
                         const val = e.target.value.replace(/[^0-9.]/g, '');
                         if (val.split('.').length <= 2) handleDataChange(sem, 'sgpa', val);
                       }}
-                      className="w-full bg-transparent border-b-2 border-white/5 py-2 px-1 font-space-grotesque font-black text-2xl text-white placeholder:text-white/5 focus:border-primary/50 outline-none text-center transition-all duration-300"
+                      className="w-full bg-transparent border-b-2 border-gray-200 py-2 px-1 font-space-grotesque font-black text-2xl text-gray-900 placeholder:text-gray-200 focus:border-primary/50 outline-none text-center transition-all duration-300"
                     />
                   </div>
 
@@ -93,7 +93,7 @@ export function ManualCgpaTable() {
                         const val = e.target.value.replace(/[^0-9]/g, '');
                         handleDataChange(sem, 'credits', val);
                       }}
-                      className="w-full bg-transparent border-b-2 border-white/5 py-2 px-1 font-space-grotesque font-black text-2xl text-white placeholder:text-white/5 focus:border-primary/50 outline-none text-center transition-all duration-300"
+                      className="w-full bg-transparent border-b-2 border-gray-200 py-2 px-1 font-space-grotesque font-black text-2xl text-gray-900 placeholder:text-gray-200 focus:border-primary/50 outline-none text-center transition-all duration-300"
                     />
                   </div>
                 </motion.div>
@@ -103,10 +103,10 @@ export function ManualCgpaTable() {
         </div>
 
         {/* Footer info */}
-        <div className="p-8 border-t border-white/5 bg-white/[0.01]">
-            <div className="flex items-start gap-4 p-5 rounded-2xl bg-primary/5 border border-primary/10">
+        <div className="p-8 border-t border-gray-100 bg-gray-50/50">
+            <div className="flex items-start gap-4 p-5 rounded-2xl bg-emerald-50 border border-emerald-100">
                 <Star className="text-primary mt-1 shrink-0" size={18} />
-                <p className="text-[11px] font-space-grotesque font-bold text-white/50 leading-relaxed uppercase tracking-wider">
+                <p className="text-[11px] font-space-grotesque font-bold text-gray-500 leading-relaxed uppercase tracking-wider">
                     Pro-tip: You can use the <span className="text-primary">GPA Mode</span> above to calculate individual semester SGPAs if you don&apos;t know them yet.
                 </p>
             </div>

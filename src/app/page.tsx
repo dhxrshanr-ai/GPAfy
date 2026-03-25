@@ -126,8 +126,10 @@ function CalculatorContent() {
               grade: pickedCode ? getGrade(s, pickedCode) : ''
             };
          }
+         // Use slotCode as grade key for resolved manual slots (mirrors SemesterSection logic)
+         const gradeKey = sub.slotCode || sub.code;
          return {
-            credits: sub.credits, type: sub.type, grade: getGrade(s, sub.code)
+            credits: sub.credits, type: sub.type, grade: getGrade(s, gradeKey)
          };
       });
       const sgpa = calculateSGPA(semInputs);

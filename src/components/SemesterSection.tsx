@@ -3,7 +3,6 @@ import { Subject } from '@/types';
 import { calculateSGPA } from '@/lib/gpa';
 import { useGpaStore } from '@/store/useGpaStore';
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, RotateCcw, ChevronDown } from 'lucide-react';
 import { ElectivePicker } from './ElectivePicker';
 import { cn } from '@/lib/utils';
@@ -27,8 +26,8 @@ export function SemesterSection({
   const [pickerOpen, setPickerOpen] = useState(false);
   const [pickerTitle, setPickerTitle] = useState<string | null>(null);
   const [pickerOptions, setPickerOptions] = useState<Subject[]>([]);
+  const [pickerExcludedCodes, setPickerExcludedCodes] = useState<Set<string>>(new Set());
   const [activePlaceholder, setActivePlaceholder] = useState<string | null>(null);
-  const [isAnimating, setIsAnimating] = useState(false);
 
   const currentExtraSubjects = extraSubjects[regulation]?.[department]?.[semNumber] || [];
   const currentSubjectCount = subjectCounts[regulation]?.[department]?.[semNumber] || 0;
@@ -73,10 +72,12 @@ export function SemesterSection({
         grade: pickedCode ? getGrade(semNumber, pickedCode) : ''
       };
     }
+    // Use slotCode as grade key for resolved manual slots
+    const gradeKey = s.slotCode || s.code;
     return {
       credits: s.credits,
       type: s.type,
-      grade: getGrade(semNumber, s.code)
+      grade: getGrade(semNumber, gradeKey)
     };
   });
   
@@ -90,6 +91,17 @@ export function SemesterSection({
     const store = useGpaStore.getState();
     const isManualSlot = placeholderCode.startsWith('SLOT_');
     
+    // Collect codes already selected in OTHER slots of this semester
+    const excludedCodes = new Set<string>();
+    Array.from({ length: currentSubjectCount }, (_, i) => {
+      const sc = `SLOT_${semNumber}_${i + 1}`;
+      if (sc !== placeholderCode) {
+        const picked = store.getSelection(semNumber, sc);
+        if (picked) excludedCodes.add(picked);
+      }
+    });
+    setPickerExcludedCodes(excludedCodes);
+
     // If it's a manual slot, we show ALL possible subjects as "options"
     if (isManualSlot) {
       setPickerOptions([
@@ -115,7 +127,8 @@ export function SemesterSection({
       if (pickedSubject) {
         rows.push(
           <SubjectRow 
-            key={pickedSubject.code} 
+            key={`slot-${s.code}`}
+            slotId={`sem${semNumber}-${s.code}`}
             subject={pickedSubject} 
             grade={getGrade(semNumber, pickedSubject.code)} 
             onGradeChange={(val) => setGrade(semNumber, pickedSubject.code, val)}
@@ -127,6 +140,7 @@ export function SemesterSection({
         rows.push(
           <SubjectRow 
             key={`placeholder-${s.code}`}
+            slotId={`sem${semNumber}-${s.code}`}
             subject={s}
             grade=""
             onGradeChange={() => {}}
@@ -137,13 +151,20 @@ export function SemesterSection({
         );
       }
     } else {
+      // For resolved manual slots (slotCode set), use the slot code as grade key
+      // so two slots picking the same subject have independent grades.
+      const gradeKey = s.slotCode || s.code;
+      const isManualResolved = !!s.slotCode; // slotCode is set only on resolved manual slots
       rows.push(
         <SubjectRow 
-          key={s.code} 
+          key={gradeKey}
+          slotId={`sem${semNumber}-${gradeKey}`}
           subject={s} 
-          grade={getGrade(semNumber, s.code)} 
-          onGradeChange={(val) => setGrade(semNumber, s.code, val)} 
+          grade={getGrade(semNumber, gradeKey)} 
+          onGradeChange={(val) => setGrade(semNumber, gradeKey, val)} 
           isExtraSubject={isExtra}
+          isLocked={isManualResolved}
+          onElectiveChange={isManualResolved ? () => openElectivePicker(s.slotCode!, [], s.name) : undefined}
           onRemove={isExtra ? () => removeExtraSubject(semNumber, s.code) : undefined}
           dropUp={isLastTwo}
         />
@@ -206,21 +227,15 @@ export function SemesterSection({
       ) : (
         <>
           <div className="pt-6 flex flex-col gap-4 relative">
-            <AnimatePresence mode="popLayout">
-              {rows.map((row, i) => (
-                <motion.div 
-                  key={(row as React.ReactElement).key}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.25 }}
-                  className="relative hover:!z-[70] focus-within:!z-[70]" 
-                  style={{ zIndex: 50 - i }}
-                >
-                  {row}
-                </motion.div>
-              ))}
-            </AnimatePresence>
+            {rows.map((row, i) => (
+              <div
+                key={(row as React.ReactElement).key}
+                className="relative"
+                style={{ zIndex: 50 - i }}
+              >
+                {row}
+              </div>
+            ))}
           </div>
           
           <button 
@@ -247,8 +262,7 @@ export function SemesterSection({
 
   return (
     <div className={cn(
-      "glass-panel rounded-[2.5rem] mb-8 transition-weightless group/semester animate-float depth-tilt border-primary/10",
-      semNumber % 2 === 0 ? "animation-delay-500" : "",
+      "glass-panel rounded-[2.5rem] mb-8 border-primary/10",
       variant === 'standalone' && "mb-0"
     )}>
        {variant === 'accordion' && (
@@ -289,9 +303,6 @@ export function SemesterSection({
                <ChevronDown size={20} />
              </div>
            </div>
-           
-           {/* Subtle internal glow */}
-           <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl translate-x-1/2 -translate-y-1/2" />
          </div>
        )}
 
@@ -300,21 +311,16 @@ export function SemesterSection({
            {content}
          </div>
        ) : (
-         <AnimatePresence>
-           {isOpen && (
-             <motion.div
-               initial={{ opacity: 0, height: 0 }}
-               animate={{ opacity: 1, height: 'auto' }}
-               exit={{ opacity: 0, height: 0 }}
-               transition={{ duration: 0.4 }}
-               onAnimationStart={() => setIsAnimating(true)}
-               onAnimationComplete={() => setIsAnimating(false)}
-               className={isAnimating ? "overflow-hidden" : "overflow-visible"}
-             >
-               {content}
-             </motion.div>
-           )}
-         </AnimatePresence>
+         <div
+           className="overflow-hidden"
+           style={{
+             maxHeight: isOpen ? '9999px' : '0',
+             opacity: isOpen ? 1 : 0,
+             transition: 'max-height 0.35s ease, opacity 0.25s ease'
+           }}
+         >
+           {content}
+         </div>
        )}
 
        <ElectivePicker 
@@ -322,6 +328,7 @@ export function SemesterSection({
          onClose={() => setPickerOpen(false)} 
          title={pickerTitle || ''}
          options={pickerOptions}
+         excludedCodes={pickerExcludedCodes}
          onSelect={(subject) => {
             if (activePlaceholder === 'EXTRA_SUBJECT') {
                addExtraSubject(semNumber, subject);

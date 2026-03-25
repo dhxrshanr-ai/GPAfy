@@ -1,5 +1,5 @@
 import { Subject } from '@/types';
-import { X, Search, Plus, Check } from 'lucide-react';
+import { X, Search, Plus, Check, Lock } from 'lucide-react';
 import { useGpaStore } from '@/store/useGpaStore';
 import { useState, useEffect } from 'react';
 import { 
@@ -12,13 +12,15 @@ export function ElectivePicker({
   onClose,
   options,
   onSelect,
-  title
+  title,
+  excludedCodes = new Set()
 }: {
   isOpen: boolean;
   onClose: () => void;
   options: Subject[];
   onSelect: (sub: Subject) => void;
   title: string;
+  excludedCodes?: Set<string>;
 }) {
   const { regulation } = useGpaStore();
   const [searchQuery, setSearchQuery] = useState('');
@@ -35,6 +37,7 @@ export function ElectivePicker({
                          regulation === 'R2025' ? MASTER_R2025_SUBJECTS : {};
 
   const masterMatch = masterRegistry[searchQuery.trim().toUpperCase()];
+  const masterMatchExcluded = masterMatch ? excludedCodes.has(masterMatch.code) : false;
 
   return (
     <div 
@@ -92,6 +95,28 @@ export function ElectivePicker({
                 <div className="animate-in fade-in slide-in-from-top-2 duration-500">
                     <p className="text-[9px] font-space-grotesque font-black text-primary/60 uppercase tracking-[0.4em] mb-3 ml-1">Terminal Resolve</p>
                     {masterMatch ? (
+                        masterMatchExcluded ? (
+                          <div className="w-full text-left glass-panel p-6 rounded-[1.5rem] border-gray-200 bg-gray-100 opacity-60 cursor-not-allowed">
+                            <div className="flex items-center justify-between mb-3">
+                              <div className="flex items-center gap-3">
+                                <span className="px-2 py-0.5 bg-gray-400 text-white text-[10px] font-space-grotesque font-bold rounded-md tracking-widest">
+                                  {masterMatch.code}
+                                </span>
+                                <span className="text-[10px] font-space-grotesque font-medium text-gray-400 tracking-widest uppercase">
+                                  • {masterMatch.credits} CR
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-1.5 px-2 py-1 bg-rose-100 rounded-lg">
+                                <Lock size={10} className="text-rose-400" />
+                                <span className="text-[9px] font-space-grotesque font-black text-rose-400 uppercase tracking-widest">In Use</span>
+                              </div>
+                            </div>
+                            <h4 className="text-lg font-outfit font-bold text-gray-500 leading-tight mb-2 uppercase tracking-tight">
+                              {masterMatch.name}
+                            </h4>
+                            <p className="text-[9px] font-space-grotesque font-black text-rose-400/80 uppercase tracking-widest">Already selected in another slot</p>
+                          </div>
+                        ) : (
                         <button
                           onClick={() => { onSelect({ ...masterMatch, type: 'theory' } as Subject); onClose(); }}
                           className="w-full text-left glass-panel p-6 rounded-[1.5rem] border-primary bg-emerald-50 hover:bg-emerald-100 transition-all group shadow-sm ring-1 ring-primary/20"
@@ -114,6 +139,7 @@ export function ElectivePicker({
                                 <Plus size={12} /> ADD SUBJECT
                             </div>
                         </button>
+                        )
                     ) : (
                         <div className="glass-panel p-6 rounded-[1.5rem] border-gray-100 bg-gray-50 text-center border-dashed border-2">
                              <p className="text-gray-400 font-space-grotesque font-bold text-xs tracking-widest uppercase py-4">
@@ -145,7 +171,26 @@ export function ElectivePicker({
                 <div className="animate-in fade-in duration-700 delay-300">
                     <p className="text-[10px] font-space-grotesque font-black text-gray-400 uppercase tracking-[0.4em] mb-4 ml-2">Suggested Orbits</p>
                     <div className="grid grid-cols-1 gap-4">
-                        {options.map((opt) => (
+                        {options.map((opt) => {
+                          const isExcluded = excludedCodes.has(opt.code);
+                          return isExcluded ? (
+                            <div
+                              key={opt.code}
+                              className="w-full text-left p-6 rounded-[1.5rem] bg-gray-100 border border-gray-200 opacity-50 cursor-not-allowed flex items-center justify-between"
+                            >
+                              <div>
+                                <div className="flex items-center gap-3 mb-1">
+                                  <span className="text-[10px] font-space-grotesque font-medium text-gray-400 uppercase">{opt.code}</span>
+                                  <span className="text-[10px] font-space-grotesque font-medium text-gray-300 uppercase">• {opt.credits} CR</span>
+                                </div>
+                                <p className="font-outfit font-medium text-gray-400">{opt.name}</p>
+                              </div>
+                              <div className="flex items-center gap-1.5 px-2 py-1 bg-rose-100 rounded-lg shrink-0">
+                                <Lock size={10} className="text-rose-400" />
+                                <span className="text-[9px] font-space-grotesque font-black text-rose-400 uppercase tracking-widest">In Use</span>
+                              </div>
+                            </div>
+                          ) : (
                            <button
                              key={opt.code}
                              onClick={() => { onSelect(opt); onClose(); }}
@@ -160,7 +205,8 @@ export function ElectivePicker({
                                </div>
                                <Plus size={18} className="text-gray-300 group-hover:text-primary transition-colors" />
                            </button>
-                        ))}
+                          );
+                        })}
                     </div>
                 </div>
             )}

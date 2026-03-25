@@ -10,6 +10,7 @@ export type Subject = {
   isNccCourse?: boolean;
   options?: Subject[];
   selectedOption?: Subject;
+  slotCode?: string;  // for manual slots: the original SLOT_X_Y identifier used as grade key
 };
 
 export type Semester = {

@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 
 const GRADES = ['O', 'A+', 'A', 'B+', 'B', 'C', 'RA'];
 
-export function GradeDropdown({ value, onChange, dropUp = false }: { value?: string, onChange: (v: string) => void, dropUp?: boolean }) {
+export function GradeDropdown({ value, onChange, dropUp = false, id = 'default' }: { value?: string, onChange: (v: string) => void, dropUp?: boolean, id?: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -66,7 +66,7 @@ export function GradeDropdown({ value, onChange, dropUp = false }: { value?: str
               >
                 {value === g && (
                   <motion.div 
-                    layoutId={`activeGrade-${value}`}
+                    layoutId={`activeGrade-${id}-${g}`}
                     className="absolute inset-0 bg-primary/10 rounded-xl border border-primary/20"
                   />
                 )}

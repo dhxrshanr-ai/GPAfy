@@ -1,7 +1,6 @@
 import { Subject } from '@/types';
 import { GradeDropdown } from './GradeDropdown';
-import { Plus, Filter, ChevronRight, Trash2 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Plus, Filter, ChevronRight, Trash2, Lock } from 'lucide-react';
 
 interface SubjectRowProps {
   subject: Subject;
@@ -10,18 +9,19 @@ interface SubjectRowProps {
   onElectiveChange?: () => void;
   isElectivePlaceholder?: boolean;
   isExtraSubject?: boolean;
+  isLocked?: boolean;
   onRemove?: () => void;
   dropUp?: boolean;
+  slotId?: string;
 }
 
-export function SubjectRow({ subject, grade, onGradeChange, onElectiveChange, isElectivePlaceholder, isExtraSubject, onRemove, dropUp = false }: SubjectRowProps) {
+export function SubjectRow({ subject, grade, onGradeChange, onElectiveChange, isElectivePlaceholder, isExtraSubject, isLocked, onRemove, dropUp = false, slotId }: SubjectRowProps) {
   if (isElectivePlaceholder) {
     return (
-      <motion.div 
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+      // Pure CSS active scale — no Framer Motion JS overhead on scroll
+      <div
         onClick={onElectiveChange}
-        className="glass-panel p-6 rounded-[1.5rem] flex items-center justify-between border-dashed border-primary/40 bg-emerald-50/50 cursor-pointer hover:bg-emerald-50 hover:border-primary transition-colors group"
+        className="glass-panel p-6 rounded-[1.5rem] flex items-center justify-between border-dashed border-primary/40 bg-emerald-50/50 cursor-pointer hover:bg-emerald-50 hover:border-primary transition-colors group active:scale-[0.98] transition-transform"
       >
         <div className="flex items-center gap-5">
           <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
@@ -32,19 +32,15 @@ export function SubjectRow({ subject, grade, onGradeChange, onElectiveChange, is
             <p className="text-sm font-outfit font-medium text-gray-500 group-hover:text-gray-800 transition-colors tracking-tight">Select {subject.name}</p>
           </div>
         </div>
-        <ChevronRight size={20} className="text-primary/40 group-hover:text-primary group-hover:translate-x-2 transition-transform" />
-      </motion.div>
+        <ChevronRight size={20} className="text-primary/40 group-hover:text-primary group-hover:translate-x-1 transition-transform" />
+      </div>
     );
   }
 
   return (
-    <motion.div 
-      whileHover={{ scale: 1.02, y: -2 }}
-      className="glass-panel p-4 sm:p-6 rounded-[2rem] flex items-center justify-between gap-3 sm:gap-5 hover:shadow-[0_8px_30px_rgba(255,85,0,0.08)] group relative transition-shadow"
-    >
-      <div className="absolute inset-0 overflow-hidden rounded-[2rem] pointer-events-none">
-        <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-primary/5 rounded-full blur-[60px] group-hover:bg-primary/10 transition-all duration-1000" />
-      </div>
+    // Replaced motion.div (JS-driven) with plain div + CSS active state
+    // Removed the absolute blur radial glow (was triggering repaint on scroll)
+    <div className="glass-panel p-4 sm:p-6 rounded-[2rem] flex items-center justify-between gap-3 sm:gap-5 group relative active:scale-[0.99] transition-transform duration-150">
 
       <div className="flex-1 z-10 relative pr-2">
         <div className="flex items-center flex-wrap gap-4 mb-3">
@@ -64,7 +60,7 @@ export function SubjectRow({ subject, grade, onGradeChange, onElectiveChange, is
             </button>
           )}
         </div>
-        <h3 className="text-sm sm:text-base font-outfit font-medium text-gray-800 leading-snug group-hover:text-gray-900 transition-colors tracking-tight">
+        <h3 className="text-sm sm:text-base font-outfit font-medium text-gray-800 tracking-tight">
           {subject.name}
         </h3>
       </div>
@@ -73,14 +69,23 @@ export function SubjectRow({ subject, grade, onGradeChange, onElectiveChange, is
         {subject.options && (
           <button 
             onClick={onElectiveChange}
-            className="p-3 rounded-full bg-gray-100 border border-gray-200 text-sky-500 hover:bg-sky-50 hover:border-sky-300 transition-colors group-hover:scale-110 active:scale-95 shrink-0 relative z-10"
+            className="p-3 rounded-full bg-gray-100 border border-gray-200 text-sky-500 hover:bg-sky-50 hover:border-sky-300 transition-colors active:scale-95 shrink-0"
             title="Switch Subject"
           >
             <Filter size={16} strokeWidth={3} />
           </button>
         )}
-        <GradeDropdown value={grade} onChange={onGradeChange} dropUp={dropUp} />
+        {isLocked && (
+          <button
+            onClick={onElectiveChange}
+            title="Re-select Subject"
+            className="p-3 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-500 hover:bg-rose-50 hover:border-rose-300 hover:text-rose-500 transition-colors active:scale-95 shrink-0"
+          >
+            <Lock size={16} strokeWidth={3} />
+          </button>
+        )}
+        <GradeDropdown value={grade} onChange={onGradeChange} dropUp={dropUp} id={slotId || subject.code} />
       </div>
-    </motion.div>
+    </div>
   );
 }

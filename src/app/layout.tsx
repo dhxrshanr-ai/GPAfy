@@ -70,7 +70,7 @@ export default function RootLayout({
           </div>
         </header>
 
-        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative perspective-[2000px]">
+        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative">
           {children}
         </main>
       </body>

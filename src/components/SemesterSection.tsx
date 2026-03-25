@@ -28,6 +28,12 @@ export function SemesterSection({
   const [pickerOptions, setPickerOptions] = useState<Subject[]>([]);
   const [pickerExcludedCodes, setPickerExcludedCodes] = useState<Set<string>>(new Set());
   const [activePlaceholder, setActivePlaceholder] = useState<string | null>(null);
+  
+  // Track if accordion is fully expanded to allow dropdown overflow
+  const [isFullyOpen, setIsFullyOpen] = useState(false);
+  
+  // Track which row has an open dropdown to lift its z-index
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
   const currentExtraSubjects = extraSubjects[regulation]?.[department]?.[semNumber] || [];
   const currentSubjectCount = subjectCounts[regulation]?.[department]?.[semNumber] || 0;
@@ -134,6 +140,7 @@ export function SemesterSection({
             onGradeChange={(val) => setGrade(semNumber, pickedSubject.code, val)}
             onElectiveChange={() => openElectivePicker(s.code, s.options!, s.name)} 
             dropUp={isLastTwo}
+            onOpenChange={(isOpen) => isOpen ? setActiveDropdown(`slot-${s.code}`) : setActiveDropdown(null)}
           />
         );
       } else {
@@ -147,6 +154,7 @@ export function SemesterSection({
             isElectivePlaceholder={true}
             onElectiveChange={() => openElectivePicker(s.code, s.options!, s.name)}
             dropUp={isLastTwo}
+            onOpenChange={(isOpen) => isOpen ? setActiveDropdown(`placeholder-${s.code}`) : setActiveDropdown(null)}
           />
         );
       }
@@ -167,6 +175,7 @@ export function SemesterSection({
           onElectiveChange={isManualResolved ? () => openElectivePicker(s.slotCode!, [], s.name) : undefined}
           onRemove={isExtra ? () => removeExtraSubject(semNumber, s.code) : undefined}
           dropUp={isLastTwo}
+          onOpenChange={(isOpen) => isOpen ? setActiveDropdown(gradeKey) : setActiveDropdown(null)}
         />
       );
     }
@@ -227,15 +236,23 @@ export function SemesterSection({
       ) : (
         <>
           <div className="pt-6 flex flex-col gap-4 relative">
-            {rows.map((row, i) => (
-              <div
-                key={(row as React.ReactElement).key}
-                className="relative focus-within:z-[70]"
-                style={{ zIndex: 50 - i }}
-              >
-                {row}
-              </div>
-            ))}
+            {rows.map((row, i) => {
+              const rowId = (row as React.ReactElement).key as string;
+              const isActive = activeDropdown === rowId;
+              
+              return (
+                <div
+                  key={rowId}
+                  className={cn(
+                    "relative transition-all duration-200",
+                    isActive ? "z-[100]" : "focus-within:z-[80] hover:z-[75]"
+                  )}
+                  style={{ zIndex: isActive ? 100 : 50 - i }}
+                >
+                  {row}
+                </div>
+              );
+            })}
           </div>
           
           <button 
@@ -312,11 +329,17 @@ export function SemesterSection({
          </div>
        ) : (
          <div
-           className="overflow-hidden"
+           className={cn(
+             "transition-all duration-300 ease-in-out",
+             isOpen ? "opacity-100" : "opacity-0"
+           )}
            style={{
-             maxHeight: isOpen ? '9999px' : '0',
-             opacity: isOpen ? 1 : 0,
-             transition: 'max-height 0.35s ease, opacity 0.25s ease'
+             maxHeight: isOpen ? '5000px' : '0',
+             overflow: isOpen && isFullyOpen ? 'visible' : 'hidden'
+           }}
+           onTransitionEnd={() => {
+             if (isOpen) setIsFullyOpen(true);
+             else setIsFullyOpen(false);
            }}
          >
            {content}

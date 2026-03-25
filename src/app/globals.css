@@ -183,4 +183,9 @@
     contain: content;
     will-change: auto;
   }
+
+  /* Force Z-Index overriding for stacking contexts */
+  .force-z-100 {
+    z-index: 100 !important;
+  }
 }

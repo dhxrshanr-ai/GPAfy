@@ -1,81 +1,88 @@
-import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { cn } from '@/lib/utils';
 
-const GRADES = ['O', 'A+', 'A', 'B+', 'B', 'C', 'RA'];
+const VALID_GRADES = new Set(['O', 'A+', 'A', 'B+', 'B', 'C', 'RA']);
 
-export function GradeDropdown({ value, onChange, dropUp = false, id = 'default' }: { value?: string, onChange: (v: string) => void, dropUp?: boolean, id?: string }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+export function GradeDropdown({ value, onChange, id = 'default', onOpenChange }: { 
+  value?: string, 
+  onChange: (v: string) => void, 
+  dropUp?: boolean, 
+  id?: string,
+  onOpenChange?: (open: boolean) => void
+}) {
+  const [inputVal, setInputVal] = useState(value || '');
+  const [isFocused, setIsFocused] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
+  // Sync external value into local input state
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+    setInputVal(value || '');
+  }, [value]);
+
+  // Notify parent when focus state changes
+  useEffect(() => {
+    onOpenChange?.(isFocused);
+  }, [isFocused, onOpenChange]);
+
+  const commit = useCallback((raw: string) => {
+    const upper = raw.trim().toUpperCase();
+    if (VALID_GRADES.has(upper)) {
+      onChange(upper);
+      setInputVal(upper);
+    } else if (upper === '') {
+      onChange('');
+      setInputVal('');
+    } else {
+      // Revert to last valid value
+      setInputVal(value || '');
+    }
+  }, [onChange, value]);
+
+  const isValid = VALID_GRADES.has(inputVal.trim().toUpperCase());
+  const isEmpty = inputVal.trim() === '';
+  const hasContent = inputVal.length > 0;
 
   return (
-    <div className="relative" ref={dropdownRef}>
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          setIsOpen(!isOpen);
+    <div className="relative shrink-0">
+      <input
+        ref={inputRef}
+        id={`grade-input-${id}`}
+        type="text"
+        maxLength={2}
+        value={inputVal}
+        placeholder="GRADE"
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => {
+          setIsFocused(false);
+          commit(inputVal);
+        }}
+        onChange={(e) => {
+          const upper = e.target.value.toUpperCase();
+          setInputVal(upper);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            commit(inputVal);
+            inputRef.current?.blur();
+          }
+          if (e.key === 'Escape') {
+            setInputVal(value || '');
+            inputRef.current?.blur();
+          }
         }}
         className={cn(
-          "h-12 w-28 sm:w-32 px-4 rounded-2xl border-2 flex items-center justify-between gap-2 font-space-grotesque font-black text-xs sm:text-sm transition-colors",
-          value
-            ? "bg-primary border-primary text-white shadow-[0_4px_15px_rgba(255,85,0,0.3)]"
-            : "bg-gray-50 border-gray-200 text-gray-400 hover:border-primary/50 hover:text-primary"
+          "h-12 w-24 sm:w-28 px-3 rounded-2xl border-2 text-center font-space-grotesque font-black text-sm tracking-widest uppercase outline-none transition-all duration-200",
+          isEmpty && !isFocused
+            ? "bg-gray-50 border-gray-200 text-gray-400 placeholder:text-gray-300"
+            : isFocused && !isValid && hasContent
+            ? "bg-red-50 border-red-300 text-red-500 ring-2 ring-red-100"
+            : isFocused
+            ? "bg-emerald-50 border-primary text-gray-800 ring-2 ring-primary/15"
+            : isValid
+            ? "bg-primary border-primary text-white shadow-[0_4px_15px_rgba(5,150,105,0.25)]"
+            : "bg-gray-50 border-gray-200 text-gray-400"
         )}
-      >
-        <span>{value || 'GRADE'}</span>
-        <ChevronDown size={16} className={cn("transition-transform duration-300", isOpen && "rotate-180")} />
-      </button>
-
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: dropUp ? 10 : -10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: dropUp ? 10 : -10, scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 400, damping: 30 }}
-            className={cn(
-              "absolute right-0 w-32 bg-white border border-gray-200 rounded-2xl p-2 shadow-[0_8px_30px_rgba(0,0,0,0.12)] z-[100] flex flex-col gap-1 backdrop-blur-xl max-h-[220px] overflow-y-auto scrollbar-hide",
-              dropUp ? "bottom-full mb-3" : "top-full mt-2"
-            )}
-          >
-            {GRADES.map((g) => (
-              <button
-                key={g}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onChange(g);
-                  setIsOpen(false);
-                }}
-                className={cn(
-                  "p-3 rounded-xl font-space-grotesque font-black text-sm text-left transition-all relative group/item active:scale-95",
-                  value === g
-                    ? "text-primary"
-                    : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
-                )}
-              >
-                {value === g && (
-                  <motion.div 
-                    layoutId={`activeGrade-${id}-${g}`}
-                    className="absolute inset-0 bg-primary/10 rounded-xl border border-primary/20"
-                  />
-                )}
-                <span className="relative z-10">{g}</span>
-              </button>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      />
     </div>
   );
 }

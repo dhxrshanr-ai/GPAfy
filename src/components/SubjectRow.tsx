@@ -13,9 +13,10 @@ interface SubjectRowProps {
   onRemove?: () => void;
   dropUp?: boolean;
   slotId?: string;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export function SubjectRow({ subject, grade, onGradeChange, onElectiveChange, isElectivePlaceholder, isExtraSubject, isLocked, onRemove, dropUp = false, slotId }: SubjectRowProps) {
+export function SubjectRow({ subject, grade, onGradeChange, onElectiveChange, isElectivePlaceholder, isExtraSubject, isLocked, onRemove, dropUp = false, slotId, onOpenChange }: SubjectRowProps) {
   if (isElectivePlaceholder) {
     return (
       // Pure CSS active scale — no Framer Motion JS overhead on scroll
@@ -84,7 +85,7 @@ export function SubjectRow({ subject, grade, onGradeChange, onElectiveChange, is
             <Lock size={16} strokeWidth={3} />
           </button>
         )}
-        <GradeDropdown value={grade} onChange={onGradeChange} dropUp={dropUp} id={slotId || subject.code} />
+        <GradeDropdown value={grade} onChange={onGradeChange} dropUp={dropUp} id={slotId || subject.code} onOpenChange={onOpenChange} />
       </div>
     </div>
   );

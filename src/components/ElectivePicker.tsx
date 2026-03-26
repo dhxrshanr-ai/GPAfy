@@ -36,8 +36,13 @@ export function ElectivePicker({
   const masterRegistry = regulation === 'R2021' ? MASTER_R2021_SUBJECTS : 
                          regulation === 'R2025' ? MASTER_R2025_SUBJECTS : {};
 
-  const masterMatch = masterRegistry[searchQuery.trim().toUpperCase()];
-  const masterMatchExcluded = masterMatch ? excludedCodes.has(masterMatch.code) : false;
+  const queryLower = searchQuery.trim().toLowerCase();
+  const searchResults = queryLower.length >= 2 
+    ? (Object.values(masterRegistry) as Subject[]).filter(s => 
+        (s.code && s.code.toLowerCase().includes(queryLower)) || 
+        (s.name && s.name.toLowerCase().includes(queryLower))
+      ).slice(0, 8)
+    : [];
 
   return (
     <div 
@@ -104,54 +109,60 @@ export function ElectivePicker({
                       <div className="w-1.5 h-1.5 rounded-full bg-[#059669] animate-pulse" />
                       <p className="text-[9px] font-space-grotesque font-black text-[#059669]/60 uppercase tracking-[0.4em]">Engine Match</p>
                     </div>
-                    {masterMatch ? (
-                        masterMatchExcluded ? (
-                          <div className="w-full text-left bg-gray-50 border border-gray-100 p-6 rounded-[2rem] opacity-60 cursor-not-allowed">
-                            <div className="flex items-center justify-between mb-4">
-                              <div className="flex items-center gap-3">
-                                <span className="px-3 py-1 bg-gray-200 text-gray-500 text-[10px] font-space-grotesque font-bold rounded-lg tracking-widest">
-                                  {masterMatch.code}
-                                </span>
-                                <span className="text-[10px] font-space-grotesque font-bold text-gray-300 tracking-widest uppercase">
-                                  {masterMatch.credits} CREDITS
-                                </span>
-                              </div>
-                              <div className="flex items-center gap-2 px-3 py-1.5 bg-rose-50 rounded-xl border border-rose-100">
-                                <Lock size={12} className="text-rose-400" />
-                                <span className="text-[10px] font-space-grotesque font-black text-rose-500 uppercase tracking-widest">In Use</span>
-                              </div>
-                            </div>
-                            <h4 className="text-lg font-outfit font-black text-gray-400 leading-tight uppercase">
-                              {masterMatch.name}
-                            </h4>
-                          </div>
-                        ) : (
-                        <button
-                          onClick={() => { onSelect({ ...masterMatch, type: 'theory' } as Subject); onClose(); }}
-                          className="w-full text-left bg-white border-2 border-[#059669]/30 p-7 rounded-[2rem] hover:border-[#059669] hover:bg-emerald-50/30 transition-all duration-300 group shadow-[0_10px_30px_rgba(5,150,105,0.08)] hover:shadow-[0_15px_45px_rgba(5,150,105,0.15)] relative overflow-hidden active:scale-[0.98]"
-                        >
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-full blur-[40px] translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity" />
-                            <div className="flex items-center justify-between mb-4 relative z-10">
-                                <div className="flex items-center gap-3">
-                                    <span className="px-3 py-1 bg-[#059669] text-white text-[10px] font-space-grotesque font-black rounded-lg tracking-widest shadow-lg shadow-emerald-500/20">
-                                        {masterMatch.code}
-                                    </span>
-                                    <span className="text-[10px] font-space-grotesque font-bold text-gray-400 tracking-widest uppercase">
-                                        {masterMatch.credits} CREDITS
-                                    </span>
-                                </div>
-                                <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-[#059669] group-hover:scale-110 transition-transform">
-                                  <Check size={20} strokeWidth={3} />
-                                </div>
-                            </div>
-                            <h4 className="text-xl font-outfit font-black text-gray-900 leading-tight uppercase tracking-tight relative z-10">
-                                {masterMatch.name}
-                            </h4>
-                            <div className="mt-4 pt-4 border-t border-[#059669]/10 flex items-center gap-2 text-[10px] font-space-grotesque font-black text-[#059669] uppercase tracking-[0.2em] relative z-10">
-                                <Plus size={14} strokeWidth={4} /> ATTACH TO SEMESTER
-                            </div>
-                        </button>
-                        )
+                    {searchResults.length > 0 ? (
+                        <div className="flex flex-col gap-4">
+                           {searchResults.map(match => {
+                               const isExcluded = excludedCodes.has(match.code);
+                               return isExcluded ? (
+                                  <div key={match.code} className="w-full text-left bg-gray-50 border border-gray-100 p-6 rounded-[2rem] opacity-60 cursor-not-allowed">
+                                    <div className="flex items-center justify-between mb-4">
+                                      <div className="flex items-center gap-3">
+                                        <span className="px-3 py-1 bg-gray-200 text-gray-500 text-[10px] font-space-grotesque font-bold rounded-lg tracking-widest">
+                                          {match.code}
+                                        </span>
+                                        <span className="text-[10px] font-space-grotesque font-bold text-gray-300 tracking-widest uppercase">
+                                          {match.credits} CREDITS
+                                        </span>
+                                      </div>
+                                      <div className="flex items-center gap-2 px-3 py-1.5 bg-rose-50 rounded-xl border border-rose-100">
+                                        <Lock size={12} className="text-rose-400" />
+                                        <span className="text-[10px] font-space-grotesque font-black text-rose-500 uppercase tracking-widest">In Use</span>
+                                      </div>
+                                    </div>
+                                    <h4 className="text-lg font-outfit font-black text-gray-400 leading-tight uppercase">
+                                      {match.name}
+                                    </h4>
+                                  </div>
+                               ) : (
+                                  <button
+                                    key={match.code}
+                                    onClick={() => { onSelect({ ...match, type: 'theory' } as Subject); onClose(); }}
+                                    className="w-full text-left bg-white border-2 border-[#059669]/30 p-7 rounded-[2rem] hover:border-[#059669] hover:bg-emerald-50/30 transition-all duration-300 group shadow-[0_10px_30px_rgba(5,150,105,0.08)] hover:shadow-[0_15px_45px_rgba(5,150,105,0.15)] relative overflow-hidden active:scale-[0.98]"
+                                  >
+                                      <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-full blur-[40px] translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                      <div className="flex items-center justify-between mb-4 relative z-10">
+                                          <div className="flex items-center gap-3">
+                                              <span className="px-3 py-1 bg-[#059669] text-white text-[10px] font-space-grotesque font-black rounded-lg tracking-widest shadow-lg shadow-emerald-500/20">
+                                                  {match.code}
+                                              </span>
+                                              <span className="text-[10px] font-space-grotesque font-bold text-gray-400 tracking-widest uppercase">
+                                                  {match.credits} CREDITS
+                                              </span>
+                                          </div>
+                                          <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-[#059669] group-hover:scale-110 transition-transform">
+                                            <Check size={20} strokeWidth={3} />
+                                          </div>
+                                      </div>
+                                      <h4 className="text-xl font-outfit font-black text-gray-900 leading-tight uppercase tracking-tight relative z-10">
+                                          {match.name}
+                                      </h4>
+                                      <div className="mt-4 pt-4 border-t border-[#059669]/10 flex items-center gap-2 text-[10px] font-space-grotesque font-black text-[#059669] uppercase tracking-[0.2em] relative z-10">
+                                          <Plus size={14} strokeWidth={4} /> ATTACH TO SEMESTER
+                                      </div>
+                                  </button>
+                               );
+                           })}
+                        </div>
                     ) : (
                         <div className="bg-gray-50/50 border-2 border-dashed border-gray-100 p-10 rounded-[2.5rem] text-center">
                              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100 shadow-sm">
@@ -182,7 +193,7 @@ export function ElectivePicker({
             )}
 
             {/* Suggested Options */}
-            {options.length > 0 && !masterMatch && (
+            {options.length > 0 && searchResults.length === 0 && (
                 <div className="animate-in fade-in duration-700">
                     <p className="text-[10px] font-space-grotesque font-black text-gray-300 uppercase tracking-[0.4em] mb-6 ml-2">Suggested Orbits</p>
                     <div className="flex flex-col gap-4">

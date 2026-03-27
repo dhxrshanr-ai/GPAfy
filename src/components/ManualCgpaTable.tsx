@@ -47,7 +47,7 @@ export function ManualCgpaTable() {
         {/* Table Header */}
         <div className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 p-6 flex items-center text-white rounded-t-[2.5rem]">
           <div className="w-12 text-center font-space-grotesque font-black text-[10px] uppercase tracking-widest opacity-80">Sem</div>
-          <div className="flex-1 text-center font-space-grotesque font-black text-[10px] uppercase tracking-widest opacity-80 pl-4">SGPA (e.g. 8.50)</div>
+          <div className="flex-1 text-center font-space-grotesque font-black text-[10px] uppercase tracking-widest opacity-80 pl-4">GPA (e.g. 8.50)</div>
           <div className="flex-1 text-center font-space-grotesque font-black text-[10px] uppercase tracking-widest opacity-80 pr-4 flex items-center justify-center gap-2">
             Credits Earned <Info size={12} className="opacity-50" />
           </div>
@@ -107,7 +107,7 @@ export function ManualCgpaTable() {
             <div className="flex items-start gap-4 p-5 rounded-2xl bg-emerald-50 border border-emerald-100">
                 <Star className="text-primary mt-1 shrink-0" size={18} />
                 <p className="text-[11px] font-space-grotesque font-bold text-gray-500 leading-relaxed uppercase tracking-wider">
-                    Pro-tip: You can use the <span className="text-primary">GPA Mode</span> above to calculate individual semester SGPAs if you don&apos;t know them yet.
+                    Pro-tip: You can use the <span className="text-primary">GPA Calculator</span> from the Dashboard to calculate individual semester GPAs if you don&apos;t know them yet.
                 </p>
             </div>
         </div>

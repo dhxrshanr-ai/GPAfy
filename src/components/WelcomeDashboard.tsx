@@ -25,7 +25,7 @@ export function WelcomeDashboard({ onSelect }: WelcomeDashboardProps) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <DashboardCard 
-          title="SGPA Calculator"
+          title="GPA Calculator"
           description="Calculate your current semester GPA with our interactive point-and-click elective picker."
           icon={<Calculator className="w-8 h-8 text-primary" />}
           onClick={() => onSelect('sgpa')}

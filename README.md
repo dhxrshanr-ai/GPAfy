@@ -1,6 +1,6 @@
 # GPAfy — Anna University GPA & CGPA Calculator
 
-GPAfy is a premium, space-themed GPA and CGPA calculator designed specifically for Anna University regulations. It offers a weightless, highly interactive experience with several key features:
+GPAfy is a premium, emerald-themed GPA and CGPA calculator designed specifically for Anna University regulations. It offers a weightless, highly interactive experience with several key features:
 
 ## 🌟 Key Features
 
@@ -9,7 +9,7 @@ GPAfy is a premium, space-themed GPA and CGPA calculator designed specifically f
   - **SGPA Mode**: Real-time calculation with manual subject count and elective picker for each semester.
   - **CGPA Mode (Quick Entry)**: A fast manual mode where you simply enter the GPA and Credits earned for your previous semesters.
 - **Elective Picker**: Seamlessly select professional or open electives from a comprehensive, regulation-specific database.
-- **Antigravity UI**: A stunning, high-fidelity user interface featuring glassmorphism, solar-orange accents, and smooth micro-animations.
+- **Antigravity UI**: A stunning, high-fidelity user interface featuring glassmorphism, emerald-green accents, and smooth micro-animations.
 - **Mobile Optimized**: A fully responsive design with a dedicated sticky result bar for a premium experience on the go.
 
 ## 🚀 Getting Started
@@ -29,4 +29,4 @@ GPAfy is a premium, space-themed GPA and CGPA calculator designed specifically f
 - **Typography**: Space Grotesque, Orbitron, Outfit (Google Fonts)
 
 ---
-Designed with precision for students who value excellence. 📐🛰✨
+Designed with precision for students who value excellence. 📐🌿✨

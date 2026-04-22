@@ -27,7 +27,7 @@ export function ManualCgpaTable() {
       className="space-y-12 relative z-10"
     >
       {/* Semester Count Selection */}
-      <div className="glass-panel p-8 rounded-[2.5rem] transition-weightless border-primary/10 relative z-[100]">
+      <div className="glass-panel p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] transition-weightless border-primary/10 relative z-[100]">
         <h2 className="text-[10px] font-space-grotesque font-black text-primary uppercase tracking-[0.4em] mb-8 flex items-center gap-2">
           <Landmark size={14} /> Scope of Calculation
         </h2>
@@ -43,9 +43,9 @@ export function ManualCgpaTable() {
       </div>
 
       {/* Manual Entry Table */}
-      <div className="glass-panel rounded-[2.5rem] overflow-hidden border-primary/10 bg-white/60 backdrop-blur-3xl shadow-lg relative z-0">
+      <div className="glass-panel rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden border-primary/10 bg-white/60 backdrop-blur-3xl shadow-lg relative z-0">
         {/* Table Header */}
-        <div className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 p-6 flex items-center text-white rounded-t-[2.5rem]">
+        <div className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 p-4 sm:p-6 flex items-center text-white rounded-t-[2rem] sm:rounded-t-[2.5rem]">
           <div className="w-12 text-center font-space-grotesque font-black text-[10px] uppercase tracking-widest opacity-80">Sem</div>
           <div className="flex-1 text-center font-space-grotesque font-black text-[10px] uppercase tracking-widest opacity-80 pl-4">GPA (e.g. 8.50)</div>
           <div className="flex-1 text-center font-space-grotesque font-black text-[10px] uppercase tracking-widest opacity-80 pr-4 flex items-center justify-center gap-2">
@@ -80,7 +80,7 @@ export function ManualCgpaTable() {
                         const val = e.target.value.replace(/[^0-9.]/g, '');
                         if (val.split('.').length <= 2) handleDataChange(sem, 'sgpa', val);
                       }}
-                      className="w-full bg-transparent border-b-2 border-gray-200 py-2 px-1 font-space-grotesque font-black text-2xl text-gray-900 placeholder:text-gray-200 focus:border-primary/50 outline-none text-center transition-all duration-300"
+                      className="w-full bg-transparent border-b-2 border-gray-200 py-2 px-1 font-space-grotesque font-black text-xl sm:text-2xl text-gray-900 placeholder:text-gray-200 focus:border-primary/50 outline-none text-center transition-all duration-300"
                     />
                   </div>
 
@@ -93,7 +93,7 @@ export function ManualCgpaTable() {
                         const val = e.target.value.replace(/[^0-9]/g, '');
                         handleDataChange(sem, 'credits', val);
                       }}
-                      className="w-full bg-transparent border-b-2 border-gray-200 py-2 px-1 font-space-grotesque font-black text-2xl text-gray-900 placeholder:text-gray-200 focus:border-primary/50 outline-none text-center transition-all duration-300"
+                      className="w-full bg-transparent border-b-2 border-gray-200 py-2 px-1 font-space-grotesque font-black text-xl sm:text-2xl text-gray-900 placeholder:text-gray-200 focus:border-primary/50 outline-none text-center transition-all duration-300"
                     />
                   </div>
                 </motion.div>
@@ -103,8 +103,8 @@ export function ManualCgpaTable() {
         </div>
 
         {/* Footer info */}
-        <div className="p-8 border-t border-gray-100 bg-gray-50/50">
-            <div className="flex items-start gap-4 p-5 rounded-2xl bg-emerald-50 border border-emerald-100">
+        <div className="p-6 sm:p-8 border-t border-gray-100 bg-gray-50/50">
+            <div className="flex items-start gap-4 p-4 sm:p-5 rounded-2xl bg-emerald-50 border border-emerald-100">
                 <Star className="text-primary mt-1 shrink-0" size={18} />
                 <p className="text-[11px] font-space-grotesque font-bold text-gray-500 leading-relaxed uppercase tracking-wider">
                     Pro-tip: You can use the <span className="text-primary">GPA Calculator</span> from the Dashboard to calculate individual semester GPAs if you don&apos;t know them yet.

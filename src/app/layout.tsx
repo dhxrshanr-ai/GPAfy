@@ -37,7 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn(
-        "min-h-screen bg-[#F7F4F0] font-outfit antialiased pb-20 md:pb-0 overflow-x-hidden selection:bg-[#059669]/20",
+        "min-h-screen bg-[#F7F4F0] font-outfit antialiased pb-20 md:pb-0 overflow-x-clip selection:bg-[#059669]/20",
         plusJakartaSans.variable,
         inter.variable,
         syne.variable

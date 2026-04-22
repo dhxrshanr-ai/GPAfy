@@ -51,7 +51,7 @@ export function SyllabusExplorer() {
             className="flex flex-col gap-8 w-full"
           >
             {/* 1. Pickers */}
-            <div className="glass-panel p-8 rounded-[2.5rem] relative z-[50]">
+            <div className="glass-panel p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] relative z-[50]">
               <h2 className="text-[10px] font-space-grotesque font-black text-[#059669] uppercase tracking-[0.4em] mb-6">
                 Syllabus Explorer
               </h2>
@@ -104,7 +104,7 @@ export function SyllabusExplorer() {
                   <button 
                     key={sub.code} 
                     onClick={() => setSelectedSubject(sub)}
-                    className="glass-panel p-6 rounded-[2rem] text-left hover:border-[#059669]/30 hover:shadow-[0_12px_40px_rgba(5,150,105,0.06)] bg-white/60 transition-all duration-300 group active:scale-[0.98] flex flex-col gap-4"
+                    className="glass-panel p-5 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] text-left hover:border-[#059669]/30 hover:shadow-[0_12px_40px_rgba(5,150,105,0.06)] bg-white/60 transition-all duration-300 group active:scale-[0.98] flex flex-col gap-4"
                   >
                       <div className="flex items-center gap-3">
                          <span className="px-3 py-1 bg-[#059669]/10 text-[#059669] rounded-lg text-[10px] font-black uppercase tracking-widest font-space-grotesque group-hover:bg-[#059669] group-hover:text-white transition-colors">
@@ -135,7 +135,7 @@ export function SyllabusExplorer() {
                <ChevronLeft size={16} strokeWidth={2.5} /> Back to Subject List
             </button>
 
-            <div className="glass-panel p-8 md:p-12 rounded-[3rem] bg-white/40 overflow-hidden relative shadow-[0_8px_30px_rgba(0,0,0,0.02)] border-white border w-full">
+            <div className="glass-panel p-6 sm:p-8 md:p-12 rounded-[2rem] sm:rounded-[3rem] bg-white/40 overflow-hidden relative shadow-[0_8px_30px_rgba(0,0,0,0.02)] border-white border w-full">
               <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(5,150,105,0.08)_0%,transparent_70%)] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
               
               <div className="flex items-center gap-3 mb-6 relative z-10 w-full">

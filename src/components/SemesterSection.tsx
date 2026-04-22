@@ -284,7 +284,7 @@ export function SemesterSection({
     )}>
        {variant === 'accordion' && (
          <div 
-           className="p-6 flex justify-between items-center cursor-pointer select-none relative overflow-hidden"
+           className="p-4 sm:p-6 flex justify-between items-center cursor-pointer select-none relative overflow-hidden"
            onClick={onToggle}
          >
            <div className="flex items-center gap-5 z-10">

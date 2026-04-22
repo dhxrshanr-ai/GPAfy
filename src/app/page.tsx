@@ -136,7 +136,7 @@ function CalculatorContent({ mode, onBack }: { mode: 'sgpa' | 'cgpa', onBack: ()
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="glass-panel p-8 rounded-[2.5rem] depth-tilt relative z-[45]"
+        className="glass-panel p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] depth-tilt relative z-[45]"
       >
         <h2 className="text-[10px] font-space-grotesque font-black text-primary uppercase tracking-[0.4em] mb-6 text-glow-orange">
           Regulation Phase
@@ -158,7 +158,7 @@ function CalculatorContent({ mode, onBack }: { mode: 'sgpa' | 'cgpa', onBack: ()
             animate={{ opacity: 1, y: 0, height: 'auto' }}
             exit={{ opacity: 0, y: -20, height: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="glass-panel p-8 rounded-[2.5rem] depth-tilt relative z-[40]"
+            className="glass-panel p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] depth-tilt relative z-[40]"
           >
             <h2 className="text-[10px] font-space-grotesque font-black text-primary uppercase tracking-[0.4em] mb-6 text-glow-orange">
               Department
@@ -182,7 +182,7 @@ function CalculatorContent({ mode, onBack }: { mode: 'sgpa' | 'cgpa', onBack: ()
             animate={{ opacity: 1, y: 0, height: 'auto' }}
             exit={{ opacity: 0, y: -20, height: 0 }}
             transition={{ duration: 0.6, delay: 0.25 }}
-            className="glass-panel p-8 rounded-[2.5rem] depth-tilt relative z-[30]"
+            className="glass-panel p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] depth-tilt relative z-[30]"
           >
             <h2 className="text-[10px] font-space-grotesque font-black text-primary uppercase tracking-[0.4em] mb-6 text-glow-orange">
               Semester Selection
@@ -271,7 +271,7 @@ function CalculatorContent({ mode, onBack }: { mode: 'sgpa' | 'cgpa', onBack: ()
              
              {mode === 'cgpa' ? (
                <div className="flex flex-col gap-10">
-                 <div className="glass-panel rounded-[3rem] p-10 text-gray-900 shadow-[0_8px_30px_rgba(255,85,0,0.05)] flex flex-col items-center gap-10 relative overflow-hidden border-primary/10">
+                 <div className="glass-panel rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 text-gray-900 shadow-[0_8px_30px_rgba(255,85,0,0.05)] flex flex-col items-center gap-6 sm:gap-10 relative overflow-hidden border-primary/10">
                    <div className="absolute top-0 right-0 w-96 h-96 bg-[radial-gradient(circle,rgba(5,150,105,0.08)_0%,transparent_70%)] -translate-y-1/2 translate-x-1/2" />
                    <div className="text-center z-10">
                      <p className="text-primary font-space-grotesque font-black text-xs tracking-[0.4em] uppercase mb-4">Cumulative Score</p>
@@ -279,18 +279,18 @@ function CalculatorContent({ mode, onBack }: { mode: 'sgpa' | 'cgpa', onBack: ()
                        initial={{ scale: 0.5, opacity: 0 }}
                        animate={{ scale: 1, opacity: 1 }}
                        transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-                       className="text-7xl sm:text-9xl font-space-grotesque font-black tracking-tighter leading-none text-gray-900"
+                       className="text-6xl sm:text-9xl font-space-grotesque font-black tracking-tighter leading-none text-gray-900"
                      >
                        {finalCgpa}
                      </motion.h1>
                    </div>
                  </div>
-                 <div className="glass-panel p-8 rounded-[3rem] depth-tilt">
+                  <div className="glass-panel p-6 sm:p-8 rounded-[2rem] sm:rounded-[3rem] depth-tilt">
                    <CgpaChart data={chartData} />
                  </div>
                </div>
              ) : (
-               <div className="glass-panel rounded-[3rem] p-10 text-gray-900 shadow-[0_8px_30px_rgba(255,85,0,0.05)] flex flex-col items-center gap-10 relative overflow-hidden border-primary/10">
+               <div className="glass-panel rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 text-gray-900 shadow-[0_8px_30px_rgba(255,85,0,0.05)] flex flex-col items-center gap-6 sm:gap-10 relative overflow-hidden border-primary/10">
                  <div className="absolute top-0 right-0 w-96 h-96 bg-[radial-gradient(circle,rgba(5,150,105,0.08)_0%,transparent_70%)] -translate-y-1/2 translate-x-1/2" />
                  <div className="text-center z-10">
                    <p className="text-primary font-space-grotesque font-black text-xs tracking-[0.4em] uppercase mb-4">Semester {activeSem} GPA</p>
@@ -298,7 +298,7 @@ function CalculatorContent({ mode, onBack }: { mode: 'sgpa' | 'cgpa', onBack: ()
                      initial={{ scale: 0.5, opacity: 0 }}
                      animate={{ scale: 1, opacity: 1 }}
                      transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-                     className="text-7xl sm:text-9xl font-space-grotesque font-black tracking-tighter leading-none text-gray-900"
+                     className="text-6xl sm:text-9xl font-space-grotesque font-black tracking-tighter leading-none text-gray-900"
                    >
                      {activeSgpa.toFixed(2)}
                    </motion.h1>

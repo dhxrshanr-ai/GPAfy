@@ -8,6 +8,8 @@ GPAfy is a premium, emerald-themed GPA and CGPA calculator designed specifically
 - **Dual Calculation Modes**:
   - **SGPA Mode**: Real-time calculation with manual subject count and elective picker for each semester.
   - **CGPA Mode (Quick Entry)**: A fast manual mode where you simply enter the GPA and Credits earned for your previous semesters.
+- **Advanced Features**: Includes CGPA prediction and planning to help you reach your academic goals.
+- **Syllabus Explorer**: Search and browse the curriculum, view subjects, and read syllabus details easily.
 - **Elective Picker**: Seamlessly select professional or open electives from a comprehensive, regulation-specific database.
 - **Antigravity UI**: A stunning, high-fidelity user interface featuring glassmorphism, emerald-green accents, and smooth micro-animations.
 - **Mobile Optimized**: A fully responsive design with a dedicated sticky result bar for a premium experience on the go.

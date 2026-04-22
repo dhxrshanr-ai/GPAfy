@@ -7,11 +7,14 @@ import { DepartmentDropdown } from './DepartmentDropdown';
 import { SemesterDropdown } from './SemesterDropdown';
 import { Subject } from '@/types';
 import { mockSyllabus } from '@/data/mockSyllabus';
+import { ElectivePicker } from './ElectivePicker';
+import { Plus, BookOpen, ChevronRight } from 'lucide-react';
 
 export function SyllabusExplorer() {
   const { regulation, setRegulation, department, setDepartment } = useGpaStore();
   const [activeSem, setActiveSem] = useState<number>(3); // Default to 3 for CS3351 example
   const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
   
   const REG_LABELS: Record<string, string> = {
     'R2013': 'Admitted 2013–16',
@@ -85,46 +88,61 @@ export function SyllabusExplorer() {
         </div>
       </div>
 
-      {/* 2. Subject Picker List */}
+      {/* 2. Subject Picker Trigger */}
       <AnimatePresence>
         {department && activeSem && subjects.length > 0 && (
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col gap-3"
+            className="flex flex-col gap-3 relative z-[40]"
           >
              <h2 className="text-[10px] font-space-grotesque font-black text-gray-400 uppercase tracking-[0.4em] ml-8 mb-2">
-                Select Subject
+                Subject
              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-               {subjects.map((sub, idx) => {
-                 const hasSyllabus = !!mockSyllabus[sub.code];
-                 return (
-                 <motion.button
-                   initial={{ opacity: 0, y: 10 }}
-                   animate={{ opacity: 1, y: 0 }}
-                   transition={{ delay: idx * 0.05, duration: 0.3 }}
-                   key={sub.code}
-                   onClick={() => hasSyllabus && setSelectedSubject(sub)}
-                   disabled={!hasSyllabus}
-                   className={`p-4 rounded-[1.5rem] border text-left flex items-start flex-col gap-2 transition-all duration-300 ${
-                     !hasSyllabus
-                       ? 'bg-gray-50/50 border-gray-100 opacity-60 cursor-not-allowed grayscale'
-                       : selectedSubject?.code === sub.code 
-                         ? 'bg-emerald-50 border-emerald-500 shadow-[0_8px_30px_rgba(16,185,129,0.1)] scale-[1.02]' 
-                         : 'bg-white/50 border-gray-100/80 hover:bg-white hover:border-emerald-300 hover:shadow-md'
-                   }`}
-                 >
-                   <div className="flex w-full items-center justify-between gap-2">
-                     <span className={`text-[10px] sm:text-xs font-space-grotesque font-black tracking-widest ${!hasSyllabus ? 'text-gray-500' : 'text-primary'} uppercase`}>{sub.code}</span>
-                     {!hasSyllabus && <span className="text-[8px] sm:text-[9px] px-2 py-0.5 rounded-full bg-gray-200 text-gray-500 uppercase font-bold tracking-widest shadow-inner">WIP</span>}
-                     {hasSyllabus && <span className="text-[8px] sm:text-[9px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 uppercase font-black tracking-widest shadow-sm">Available</span>}
+             
+             {selectedSubject ? (
+               <div
+                 onClick={() => setIsPickerOpen(true)}
+                 className="glass-panel p-6 rounded-[1.5rem] flex items-center justify-between border border-primary/20 bg-emerald-50 cursor-pointer hover:border-primary transition-colors group active:scale-[0.98]"
+               >
+                 <div className="flex items-center gap-5">
+                   <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                     <BookOpen size={22} strokeWidth={3} />
                    </div>
-                   <span className={`text-sm sm:text-base font-medium line-clamp-1 ${!hasSyllabus ? 'text-gray-400' : 'text-gray-800 tracking-tight'}`}>{sub.name}</span>
-                 </motion.button>
-                 );
-               })}
-             </div>
+                   <div>
+                     <p className="text-[10px] font-space-grotesque font-black text-primary uppercase tracking-[0.3em]">Viewing Syllabus</p>
+                     <p className="text-sm font-outfit font-medium text-gray-800 tracking-tight">{selectedSubject.name}</p>
+                   </div>
+                 </div>
+                 <ChevronRight size={20} className="text-primary/40 group-hover:text-primary group-hover:translate-x-1 transition-transform" />
+               </div>
+             ) : (
+               <div
+                 onClick={() => setIsPickerOpen(true)}
+                 className="glass-panel p-6 rounded-[1.5rem] flex items-center justify-between border-dashed border-primary/40 bg-emerald-50/50 cursor-pointer hover:bg-emerald-50 hover:border-primary transition-colors group active:scale-[0.98]"
+               >
+                 <div className="flex items-center gap-5">
+                   <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                     <Plus size={22} strokeWidth={3} />
+                   </div>
+                   <div>
+                     <p className="text-[10px] font-space-grotesque font-black text-primary uppercase tracking-[0.3em]">Explore Syllabus</p>
+                     <p className="text-sm font-outfit font-medium text-gray-500 group-hover:text-gray-800 transition-colors tracking-tight">Tap to Select Subject</p>
+                   </div>
+                 </div>
+                 <ChevronRight size={20} className="text-primary/40 group-hover:text-primary group-hover:translate-x-1 transition-transform" />
+               </div>
+             )}
+
+             <ElectivePicker 
+               isOpen={isPickerOpen}
+               onClose={() => setIsPickerOpen(false)}
+               options={subjects}
+               onSelect={(sub) => {
+                 setSelectedSubject(sub);
+               }}
+               title="Select Subject"
+             />
           </motion.div>
         )}
       </AnimatePresence>

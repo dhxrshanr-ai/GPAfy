@@ -47,7 +47,7 @@ export default function RootLayout({
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,#d1fae5_0%,#F7F4F0_65%)] opacity-60" />
         </div>
 
-        <header className="sticky top-0 z-[100] w-full bg-white/90 border-b border-gray-200/80 shadow-sm" style={{ backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
+        <header className="sticky top-0 z-[100] w-full bg-white/95 md:bg-white/90 border-b border-gray-200/80 shadow-sm md:backdrop-blur-md">
           <div className="max-w-4xl mx-auto">
             <div className="py-5 px-6 flex items-center justify-between">
               <div className="flex items-center gap-4">

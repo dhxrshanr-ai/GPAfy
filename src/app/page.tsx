@@ -271,8 +271,8 @@ function CalculatorContent({ mode, onBack }: { mode: 'sgpa' | 'cgpa', onBack: ()
              
              {mode === 'cgpa' ? (
                <div className="flex flex-col gap-10">
-                 <div className="glass-panel rounded-[3rem] p-10 text-gray-900 shadow-[0_8px_50px_rgba(255,85,0,0.08)] flex flex-col items-center gap-10 relative overflow-hidden border-primary/20 depth-tilt">
-                   <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 animate-pulse" />
+                 <div className="glass-panel rounded-[3rem] p-10 text-gray-900 shadow-[0_8px_30px_rgba(255,85,0,0.05)] flex flex-col items-center gap-10 relative overflow-hidden border-primary/10">
+                   <div className="absolute top-0 right-0 w-96 h-96 bg-[radial-gradient(circle,rgba(5,150,105,0.08)_0%,transparent_70%)] -translate-y-1/2 translate-x-1/2" />
                    <div className="text-center z-10">
                      <p className="text-primary font-space-grotesque font-black text-xs tracking-[0.4em] uppercase mb-4">Cumulative Score</p>
                      <motion.h1 
@@ -290,8 +290,8 @@ function CalculatorContent({ mode, onBack }: { mode: 'sgpa' | 'cgpa', onBack: ()
                  </div>
                </div>
              ) : (
-               <div className="glass-panel rounded-[3rem] p-10 text-gray-900 shadow-[0_8px_50px_rgba(255,85,0,0.08)] flex flex-col items-center gap-10 relative overflow-hidden border-primary/20 depth-tilt">
-                 <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 animate-pulse" />
+               <div className="glass-panel rounded-[3rem] p-10 text-gray-900 shadow-[0_8px_30px_rgba(255,85,0,0.05)] flex flex-col items-center gap-10 relative overflow-hidden border-primary/10">
+                 <div className="absolute top-0 right-0 w-96 h-96 bg-[radial-gradient(circle,rgba(5,150,105,0.08)_0%,transparent_70%)] -translate-y-1/2 translate-x-1/2" />
                  <div className="text-center z-10">
                    <p className="text-primary font-space-grotesque font-black text-xs tracking-[0.4em] uppercase mb-4">Semester {activeSem} GPA</p>
                    <motion.h1 

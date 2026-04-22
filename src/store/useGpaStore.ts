@@ -25,7 +25,9 @@ interface GpaStore {
   // [reg][dept][sem] = { sgpa: string, credits: string }
   manualSemData: Record<string, Record<string, Record<number, { sgpa: string, credits: string }>>>;
   cgpaSemesterCount: Record<string, Record<string, number>>;
+  theme: 'dark' | 'light';
   
+  toggleTheme: () => void;
   setRegulation: (reg: string) => void;
   setDepartment: (dept: string) => void;
   setGrade: (sem: number, subjectCode: string, grade: string) => void;
@@ -216,5 +218,7 @@ export const useGpaStore = create<GpaStore>()((set, get) => ({
     }
      
     return { grades: currentGrades, selections: currentSelections, extraSubjects: currentExtra, subjectCounts: currentCounts };
-  })
+  }),
+  theme: 'dark',
+  toggleTheme: () => set((state) => ({ theme: state.theme === 'dark' ? 'light' : 'dark' })),
 }));
